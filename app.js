@@ -1,5 +1,5 @@
 /* ==========================================================================
-   祝老妈生日快乐 · 川西十二日画卷 — 电影剪辑式交互与轮放引擎
+   致老妈 · 川西之旅音乐相册 — 电影切镜轮放与自动放映引擎
    ========================================================================== */
 
 (function () {
@@ -11,10 +11,10 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-  let currentSlideMs = DATA.tracks[0].slideMs || 3600;
-  const activeReels = [];      // { el, start, stop, next, isVisible }
-  const activeHandscrolls = []; // { viewport, paused }
-  const activeDecks = [];       // { el, start, stop }
+  let currentSlideMs = DATA.tracks[0].slideMs || 3400;
+  const activeReels = [];
+  const activeHandscrolls = [];
+  const activeDecks = [];
   const allPhotosFlat = [];
 
   // ------------------------------------------------------------------------
@@ -34,7 +34,7 @@
       slides[idx].classList.remove("active");
       idx = (idx + 1) % slides.length;
       slides[idx].classList.add("active");
-    }, 5800);
+    }, 5600);
 
     const finaleBg = $("#finaleBg");
     if (finaleBg && DATA.coverPhoto) {
@@ -43,7 +43,7 @@
   }
 
   // ------------------------------------------------------------------------
-  // 2. 全屏轻量 Canvas 粒子引擎（微粒秋光 / 生日金箔 / 祈愿孔明灯）
+  // 2. 全屏轻量 Canvas 粒子引擎
   // ------------------------------------------------------------------------
   const AmbientFX = (() => {
     const canvas = $("#ambientCanvas");
@@ -72,11 +72,11 @@
           x: Math.random() * W,
           y: Math.random() * H,
           r: 1.8 + Math.random() * 3.4,
-          vy: 0.18 + Math.random() * 0.38,
+          vy: 0.18 + Math.random() * 0.36,
           vx: -0.18 + Math.random() * 0.36,
           sway: Math.random() * Math.PI * 2,
           swaySpeed: 0.008 + Math.random() * 0.012,
-          alpha: 0.18 + Math.random() * 0.36
+          alpha: 0.18 + Math.random() * 0.34
         });
       }
     }
@@ -112,7 +112,7 @@
     }
 
     function setTempo(bpm) {
-      speedScale = Math.max(0.72, Math.min(1.2, bpm / 88));
+      speedScale = Math.max(0.76, Math.min(1.2, bpm / 92));
     }
 
     function tick() {
@@ -181,13 +181,12 @@
         ctx.restore();
       }
 
-      // 横轴长卷微速自然漂移（像徐徐展开的画卷）
       for (const hs of activeHandscrolls) {
         if (!hs.paused && hs.visible) {
           const vp = hs.viewport;
           const maxScroll = vp.scrollWidth - vp.clientWidth;
           if (maxScroll > 20) {
-            vp.scrollLeft += hs.dir * 0.42 * speedScale;
+            vp.scrollLeft += hs.dir * 0.44 * speedScale;
             if (vp.scrollLeft >= maxScroll - 2) hs.dir = -1;
             else if (vp.scrollLeft <= 2) hs.dir = 1;
           }
@@ -206,14 +205,13 @@
   })();
 
   // ------------------------------------------------------------------------
-  // 3. 四曲双音轨 1.35s 平滑交叉淡入淡出音乐引擎
+  // 3. 双曲平滑交叉淡入淡出音乐引擎（不显示作者）
   // ------------------------------------------------------------------------
   const MusicEngine = (() => {
     const deckA = $("#bgmDeckA");
     const deckB = $("#bgmDeckB");
     const dock = $("#musicDock");
     const titleEl = $("#musicTitle");
-    const artistEl = $("#musicArtist");
     const toggleBtn = $("#musicToggle");
     const nextBtn = $("#musicNext");
     const listBtn = $("#musicListBtn");
@@ -232,11 +230,11 @@
     const TARGET_VOL = 0.72;
 
     function applyTrackRhythm(track) {
-      currentSlideMs = track.slideMs || 3600;
+      currentSlideMs = track.slideMs || 3400;
       document.documentElement.style.setProperty("--beat-sec", `${track.beatSec}s`);
       document.documentElement.style.setProperty("--slide-ms", `${currentSlideMs}ms`);
-      document.body.dataset.mood = track.motionMood || "crisp";
-      AmbientFX.setTempo(track.bpm || 80);
+      document.body.dataset.mood = track.motionMood || "folk";
+      AmbientFX.setTempo(track.bpm || 90);
     }
 
     function showToast(msg) {
@@ -253,16 +251,13 @@
         btn.type = "button";
         btn.className = "mp-item" + (i === currentIdx ? " active" : "");
         btn.innerHTML = `
-          <span class="mp-item-top">
-            <span class="mp-item-name">${i === currentIdx && isPlaying ? "♫ " : ""}${tr.shortTitle}</span>
-            <span class="mp-item-artist">${tr.artist}</span>
-          </span>
+          <span class="mp-item-name">${i === currentIdx && isPlaying ? "♫ " : ""}${tr.shortTitle}</span>
           <span class="mp-item-range">${tr.chapterRange}</span>
         `;
         btn.addEventListener("click", () => {
           autoSwitch = false;
           autoBtn.classList.remove("active");
-          selectTrack(i, true, `已切换：${tr.shortTitle} — ${tr.artist}`);
+          selectTrack(i, true, `♫ ${tr.shortTitle}`);
         });
         trackListEl.appendChild(btn);
       });
@@ -271,7 +266,6 @@
     function updateUI() {
       const tr = DATA.tracks[currentIdx];
       titleEl.textContent = tr.shortTitle;
-      artistEl.textContent = tr.artist;
       dock.classList.toggle("playing", isPlaying);
       applyTrackRhythm(tr);
       renderPlaylist();
@@ -302,7 +296,7 @@
           isPlaying = true;
           updateUI();
           fadeVolume(activeDeck, 0.02, TARGET_VOL, 1200);
-          if (!silentToast) showToast(`♫ ${tr.shortTitle} — ${tr.artist}`);
+          if (!silentToast) showToast(`♫ ${tr.shortTitle}`);
         }).catch(() => { isPlaying = false; updateUI(); });
       }
     }
@@ -339,7 +333,7 @@
           updateUI();
           fadeVolume(nextDeck, 0.01, TARGET_VOL, 1350);
           fadeVolume(oldDeck, oldDeck.volume || TARGET_VOL, 0, 1150, () => oldDeck.pause());
-          showToast(toastMsg || `♫ ${tr.shortTitle} — ${tr.artist}`);
+          showToast(toastMsg || `♫ ${tr.shortTitle}`);
         }).catch(() => { isPlaying = false; updateUI(); });
       }
     }
@@ -350,7 +344,7 @@
       autoBtn.classList.remove("active");
       const next = (currentIdx + 1) % DATA.tracks.length;
       const tr = DATA.tracks[next];
-      selectTrack(next, true, `♫ ${tr.shortTitle} — ${tr.artist}`);
+      selectTrack(next, true, `♫ ${tr.shortTitle}`);
     });
     listBtn.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -376,7 +370,7 @@
     updateUI();
 
     return {
-      playFromGesture() { startCurrent(); },
+      playFromGesture() { startCurrent(true); },
       onSectionVisible(sectionId) {
         if (!autoSwitch || !isPlaying || !unlocked) return;
         const targetIdx = DATA.sectionTrackMap[sectionId];
@@ -389,7 +383,7 @@
   })();
 
   // ------------------------------------------------------------------------
-  // 4. 顶部滚动日期与实时海拔 HUD + 自动放映导演模式
+  // 4. 顶部滚动日期与海拔 HUD + 自动放映引擎
   // ------------------------------------------------------------------------
   const CinemaHUD = (() => {
     const hud = $("#cinemaHud");
@@ -407,7 +401,6 @@
     let curElev = 3480;
     let elevAnim = null;
 
-    // 填充 12 日跳转抽屉
     DATA.chapters.forEach((ch) => {
       const btn = document.createElement("button");
       btn.type = "button";
@@ -417,7 +410,7 @@
       btn.addEventListener("click", () => {
         drawer.classList.remove("open");
         drawer.setAttribute("aria-hidden", "true");
-        stopAutoFilm();
+        stopAutoFilm(true);
         const el = document.getElementById(ch.id);
         if (el) el.scrollIntoView({ behavior: "smooth" });
       });
@@ -455,7 +448,6 @@
 
     function setChapter(ch) {
       if (!ch) return;
-      // 同步全屏氛围底色
       document.documentElement.style.setProperty("--scene-bg", ch.bgColor);
       document.documentElement.style.setProperty("--scene-tint", ch.surfaceTint);
       document.documentElement.style.setProperty("--scene-accent", ch.accent);
@@ -478,7 +470,6 @@
       });
     }
 
-    // 自动放映模式（像剪辑短片一样按章节平滑推进）
     let autoFilmRunning = false;
     let autoTimer = null;
     const sequenceIds = ["birthday", "route", ...DATA.chapters.map((c) => c.id), "finale"];
@@ -490,7 +481,7 @@
       clearTimeout(autoTimer);
       autoBtn.classList.remove("active");
       autoIcon.textContent = "▶";
-      autoLabel.textContent = "自动放映";
+      autoLabel.textContent = "继续放映";
       if (!silent) MusicEngine.showToast("已切回自由浏览");
     }
 
@@ -498,20 +489,18 @@
       if (!autoFilmRunning) return;
       if (seqIdx >= sequenceIds.length) {
         stopAutoFilm(true);
-        MusicEngine.showToast("全卷放映完毕");
+        MusicEngine.showToast("画卷放映完毕");
         return;
       }
       const id = sequenceIds[seqIdx++];
       const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-      // 停留时间：图片轮放章节给足 10.5 秒欣赏 3 帧切换，过场字幕给 5.5 秒
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+
       const ch = DATA.chapters.find((c) => c.id === id);
-      const dwell = ch && ch.presentation === "intertitle" ? 5500
-        : id === "route" ? 4500
-        : id === "birthday" ? 6500
-        : 10800;
+      const dwell = ch && ch.presentation === "intertitle" ? 5400
+        : id === "route" ? 4200
+        : id === "birthday" ? 6600
+        : 10500;
       autoTimer = setTimeout(advanceFilm, dwell);
     }
 
@@ -524,14 +513,13 @@
       if (fromStart) {
         seqIdx = 0;
       } else {
-        // 从当前可见章节的下一站继续
         const curIdx = sequenceIds.findIndex((id) => {
           const el = document.getElementById(id);
           return el && el.getBoundingClientRect().top >= -120;
         });
         seqIdx = curIdx >= 0 ? curIdx : 0;
       }
-      MusicEngine.showToast("已开启自动放映 · 随时滑动即可接管");
+      MusicEngine.showToast("♫ 正在放映 · 随时滑动可自由浏览");
       clearTimeout(autoTimer);
       advanceFilm();
     }
@@ -541,7 +529,6 @@
       else startAutoFilm(false);
     });
 
-    // 用户手动滚轮或触屏滑动时，温柔交还控制权
     ["wheel", "touchmove"].forEach((evt) => {
       window.addEventListener(evt, () => {
         if (autoFilmRunning) stopAutoFilm(false);
@@ -557,17 +544,12 @@
   })();
 
   // ------------------------------------------------------------------------
-  // 5. 开场按钮与互动吹蜡烛
+  // 5. 单一「开启画卷」入口（即自动放映）与互动吹蜡烛
   // ------------------------------------------------------------------------
   function initHeroAndCake() {
-    $("#btnEnterWithMusic").addEventListener("click", (e) => {
+    $("#btnOpenScroll").addEventListener("click", (e) => {
       const r = e.currentTarget.getBoundingClientRect();
       AmbientFX.spawnBurst(r.left + r.width / 2, r.top + r.height / 2, 40);
-      MusicEngine.playFromGesture();
-      $("#birthday").scrollIntoView({ behavior: "smooth" });
-    });
-
-    $("#btnEnterAutoFilm").addEventListener("click", () => {
       CinemaHUD.startAutoFilm(true);
     });
 
@@ -598,7 +580,7 @@
   }
 
   // ------------------------------------------------------------------------
-  // 6. 十二日海拔路线 SVG
+  // 6. 海拔路线 SVG
   // ------------------------------------------------------------------------
   function buildRouteMap() {
     const svg = $("#routeSvg");
@@ -672,7 +654,7 @@
   }
 
   // ------------------------------------------------------------------------
-  // 7. 构建各种创意轮放组件（Cinema Reel / Handscroll / 3D Deck / Spotlight）
+  // 7. 构建融图轮放组件（Cinema Reel + 6 种切镜 / Handscroll / 3D Deck / Spotlight）
   // ------------------------------------------------------------------------
   function registerPhotos(ch, entry) {
     return entry.photos.map((ph, idx) => {
@@ -691,11 +673,23 @@
 
   function createCinemaReel(ch, entry, reverse) {
     const photos = registerPhotos(ch, entry);
+    const cuts = entry.cuts || ["curtain", "blur-zoom", "wipe-right", "flash-dissolve", "wipe-diag", "iris"];
+    const enterCut = ch.enterCut || "curtain";
+
     const wrap = document.createElement("div");
     wrap.className = "cinema-layout" + (reverse ? " reverse" : "");
 
     const stageCol = document.createElement("div");
-    stageCol.className = "cinema-stage-col unroll-reveal";
+    stageCol.className = `cinema-stage-col cut-reveal cut-${enterCut}`;
+
+    const shell = document.createElement("div");
+    shell.className = "reel-stage-shell";
+
+    // 动态随图流溢的环境光晕
+    const aura = document.createElement("div");
+    aura.className = "stage-aura";
+    aura.style.backgroundImage = `url("${photos[0].thumb}")`;
+    shell.appendChild(aura);
 
     const frame = document.createElement("div");
     frame.className = "reel-frame";
@@ -703,10 +697,9 @@
     const slidesBox = document.createElement("div");
     slidesBox.className = "reel-slides";
 
-    const isWipe = entry.transition === "wipe";
     const slideEls = photos.map((ph, i) => {
       const s = document.createElement("div");
-      s.className = `reel-slide orient-${ph.orient}${isWipe ? " is-wipe" : ""}${i === 0 ? " active" : ""}`;
+      s.className = `reel-slide orient-${ph.orient}${i === 0 ? " active" : ""}`;
       if (ph.orient === "P") {
         const bg = document.createElement("img");
         bg.className = "reel-bg-blur";
@@ -727,7 +720,15 @@
     });
     frame.appendChild(slidesBox);
 
-    // 底部胶片进度条与轻控按钮
+    // 柔和暗角溶色罩 + 胶片暖光闪白层 + 扫光漏光层
+    const vignette = document.createElement("div");
+    vignette.className = "reel-vignette-blend";
+    const flashLayer = document.createElement("div");
+    flashLayer.className = "reel-flash-layer";
+    const streakLayer = document.createElement("div");
+    streakLayer.className = "reel-light-streak";
+    frame.append(vignette, flashLayer, streakLayer);
+
     const hud = document.createElement("div");
     hud.className = "reel-hud";
     const capRow = document.createElement("div");
@@ -758,9 +759,10 @@
 
     hud.append(capRow, barsBox);
     frame.appendChild(hud);
-    stageCol.appendChild(frame);
+    shell.appendChild(frame);
+    stageCol.appendChild(shell);
 
-    // 可选展开全部缩略条
+    // 折叠缩略条
     const stripBtn = document.createElement("button");
     stripBtn.type = "button";
     stripBtn.className = "reel-filmstrip-toggle";
@@ -785,9 +787,8 @@
 
     stageCol.append(stripBtn, strip);
 
-    // 侧边文案栏（纯正妈妈原话）
     const storyCol = document.createElement("div");
-    storyCol.className = "cinema-story-col unroll-reveal";
+    storyCol.className = "cinema-story-col cut-reveal cut-blur-zoom";
     const hasClock = entry.time && entry.time.includes(":");
     const metaTime = hasClock ? `${ch.date} ${entry.time}` : ch.date;
     storyCol.innerHTML = `
@@ -799,8 +800,13 @@
 
     wrap.append(stageCol, storyCol);
 
-    // 轮放状态机
+    const ALL_CUT_CLASSES = [
+      "anim-curtain", "anim-wipe-right", "anim-wipe-diag",
+      "anim-iris", "anim-blur-zoom", "anim-flash-dissolve"
+    ];
+
     let idx = 0;
+    let cutStep = 0;
     let paused = false;
     let visible = false;
     let timer = null;
@@ -810,15 +816,31 @@
       if (nextIdx === idx) return;
       const prevIdx = idx;
       idx = nextIdx;
+      const cutName = cuts[cutStep % cuts.length];
+      cutStep++;
+
+      // 更新外围融图环境光晕
+      aura.style.backgroundImage = `url("${photos[idx].thumb}")`;
+
+      // 触发胶片闪白或漏光扫边特效
+      if (cutName === "flash-dissolve" || cutName === "blur-zoom") {
+        flashLayer.classList.remove("firing");
+        void flashLayer.offsetWidth;
+        flashLayer.classList.add("firing");
+      } else if (cutName === "wipe-right" || cutName === "wipe-diag") {
+        streakLayer.classList.remove("sweeping");
+        void streakLayer.offsetWidth;
+        streakLayer.classList.add("sweeping");
+      }
 
       slideEls.forEach((s, i) => {
-        s.classList.remove("prev", "active");
+        s.classList.remove("prev", "active", ...ALL_CUT_CLASSES);
         if (i === prevIdx) s.classList.add("prev");
         if (i === idx) {
-          // 重置 Ken Burns 动画
           const img = s.querySelector(".reel-main-img");
           if (img) { img.style.animation = "none"; void img.offsetWidth; img.style.animation = ""; }
-          s.classList.add("active");
+          void s.offsetWidth;
+          s.classList.add("active", `anim-${cutName}`);
         }
       });
 
@@ -860,7 +882,6 @@
     });
     slidesBox.addEventListener("click", () => Lightbox.open(photos[idx].globalIdx));
 
-    // 手机手势左右滑切帧
     let touchX = 0;
     frame.addEventListener("touchstart", (e) => { touchX = e.changedTouches[0].clientX; }, { passive: true });
     frame.addEventListener("touchend", (e) => {
@@ -885,16 +906,16 @@
     const wrap = document.createElement("div");
 
     const head = document.createElement("div");
-    head.className = "handscroll-header unroll-reveal";
+    head.className = "handscroll-header cut-reveal cut-blur-zoom";
     const hasClock = entry.time && entry.time.includes(":");
     head.innerHTML = `
       <p class="mom-quote">${escapeHtml(entry.caption)}</p>
-      <div class="mom-quote-meta">${hasClock ? `${ch.date} ${entry.time}` : ch.date} · 横轴画卷（轻触可暂停或放大）</div>
+      <div class="mom-quote-meta">${hasClock ? `${ch.date} ${entry.time}` : ch.date} · 横轴画卷</div>
     `;
     wrap.appendChild(head);
 
     const vp = document.createElement("div");
-    vp.className = "handscroll-viewport unroll-reveal";
+    vp.className = "handscroll-viewport cut-reveal cut-wipe-right";
     const track = document.createElement("div");
     track.className = "handscroll-track";
 
@@ -945,7 +966,15 @@
     wrap.className = "cinema-layout";
 
     const stageCol = document.createElement("div");
-    stageCol.className = "cinema-stage-col unroll-reveal";
+    stageCol.className = "cinema-stage-col cut-reveal cut-iris";
+
+    const shell = document.createElement("div");
+    shell.className = "deck-stage-shell";
+
+    const aura = document.createElement("div");
+    aura.className = "stage-aura";
+    aura.style.backgroundImage = `url("${photos[0].thumb}")`;
+    shell.appendChild(aura);
 
     const deck = document.createElement("div");
     deck.className = "deck-stage";
@@ -970,11 +999,14 @@
       return c;
     });
 
+    shell.appendChild(deck);
+
     let topIdx = 0;
     let visible = false;
     let timer = null;
 
     function layoutCards() {
+      aura.style.backgroundImage = `url("${photos[topIdx].thumb}")`;
       cards.forEach((c, i) => {
         c.classList.remove("pos-0", "pos-1", "pos-2", "pos-rest", "dealing");
         const rel = (i - topIdx + photos.length) % photos.length;
@@ -1020,13 +1052,13 @@
     btnZoom.addEventListener("click", () => Lightbox.open(photos[topIdx].globalIdx));
 
     ctrls.append(btnNextCard, btnZoom);
-    stageCol.append(deck, ctrls);
+    stageCol.append(shell, ctrls);
 
     const storyCol = document.createElement("div");
-    storyCol.className = "cinema-story-col unroll-reveal";
+    storyCol.className = "cinema-story-col cut-reveal cut-blur-zoom";
     storyCol.innerHTML = `
       <p class="mom-quote">${escapeHtml(entry.caption)}</p>
-      <div class="mom-quote-meta">${ch.date} ${entry.time || ""} · 叠影轮播（轻点翻页）</div>
+      <div class="mom-quote-meta">${ch.date} ${entry.time || ""} · 叠影轮播</div>
     `;
 
     wrap.append(stageCol, storyCol);
@@ -1048,7 +1080,12 @@
     const photos = registerPhotos(ch, entry);
     const ph = photos[0];
     const wrap = document.createElement("div");
-    wrap.className = "spotlight-wrap unroll-reveal";
+    wrap.className = `spotlight-wrap cut-reveal cut-${ch.enterCut || "iris"}`;
+
+    const aura = document.createElement("div");
+    aura.className = "stage-aura";
+    aura.style.backgroundImage = `url("${ph.thumb}")`;
+    wrap.appendChild(aura);
 
     const frame = document.createElement("div");
     frame.className = "spotlight-frame";
@@ -1106,7 +1143,7 @@
   }
 
   // ------------------------------------------------------------------------
-  // 8. 渲染全部 12 天连续画卷
+  // 8. 渲染全部连续画卷章节
   // ------------------------------------------------------------------------
   function renderChapters() {
     const root = $("#chaptersRoot");
@@ -1121,9 +1158,8 @@
       const container = document.createElement("div");
       container.className = "container";
 
-      // 电影式日期流转过场线
       const bridge = document.createElement("div");
-      bridge.className = "date-bridge unroll-reveal";
+      bridge.className = "date-bridge cut-reveal cut-curtain";
       bridge.innerHTML = `
         <span class="bridge-line"></span>
         <div class="bridge-stamp">
@@ -1141,7 +1177,7 @@
         grid.className = "intertitle-wrap" + (ch.entries.length > 1 ? " two-col" : "");
         ch.entries.forEach((en) => {
           const card = document.createElement("article");
-          card.className = "intertitle-card unroll-reveal";
+          card.className = `intertitle-card cut-reveal cut-${ch.enterCut || "blur-zoom"}`;
           card.innerHTML = `
             ${en.placeTag ? `<div class="intertitle-tag">${en.placeTag}</div>` : ""}
             <p class="mom-quote">${escapeHtml(en.caption)}</p>
@@ -1155,7 +1191,7 @@
         ch.entries.forEach((en) => {
           if (en.mode === "note") {
             const note = document.createElement("article");
-            note.className = "chapter-prelude-note unroll-reveal";
+            note.className = "chapter-prelude-note cut-reveal cut-blur-zoom";
             note.innerHTML = `
               <p class="mom-quote">${escapeHtml(en.caption)}</p>
               <div class="mom-quote-meta">${ch.date} ${en.time || ""}</div>
@@ -1245,21 +1281,32 @@
   })();
 
   // ------------------------------------------------------------------------
-  // 10. 滚动观察器：画卷展开 + 滚动日期 HUD + 轮放激活 + 章节切歌
+  // 10. 滚动观察器（监听父级章节，绝不因 clip-path 漏触发显露）
   // ------------------------------------------------------------------------
   function initObservers() {
-    // 1) 画卷展开动效
-    const unrollObs = new IntersectionObserver((entries) => {
+    const revealParents = [$("#birthday"), $("#route"), ...$$(".chapter-scene"), $("#finale")].filter(Boolean);
+    const parentObs = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) {
+          $$(".cut-reveal", en.target).forEach((el, idx) => {
+            setTimeout(() => el.classList.add("in-view"), idx * 90);
+          });
+          parentObs.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.02, rootMargin: "0px 0px -20px 0px" });
+    revealParents.forEach((p) => parentObs.observe(p));
+
+    const cutObs = new IntersectionObserver((entries) => {
       entries.forEach((en) => {
         if (en.isIntersecting) {
           en.target.classList.add("in-view");
-          unrollObs.unobserve(en.target);
+          cutObs.unobserve(en.target);
         }
       });
-    }, { threshold: 0.08, rootMargin: "0px 0px -30px 0px" });
-    $$(".unroll-reveal").forEach((el) => unrollObs.observe(el));
+    }, { threshold: 0.01 });
+    $$(".cut-reveal").forEach((el) => cutObs.observe(el));
 
-    // 2) 仅对当前视口内的轮放/长卷/叠卡启用自动播放（省电流畅！）
     const mediaObs = new IntersectionObserver((entries) => {
       entries.forEach((en) => {
         const r = activeReels.find((x) => x.el === en.target);
@@ -1275,7 +1322,6 @@
     activeHandscrolls.forEach((h) => mediaObs.observe(h.viewport));
     activeDecks.forEach((d) => mediaObs.observe(d.el));
 
-    // 3) 章节切换：驱动顶部滚动日期 HUD、背景色调流转、海拔路线高亮、章节音乐切歌
     const routeNodes = $$(".route-node");
     const chapterMap = Object.fromEntries(DATA.chapters.map((c) => [c.id, c]));
     const sections = [$("#top"), $("#birthday"), $("#route"), ...$$(".chapter-scene"), $("#finale")].filter(Boolean);
@@ -1302,7 +1348,6 @@
 
     sections.forEach((s) => secObs.observe(s));
 
-    // 4) 顶部阅读进度条
     const bar = $("#scrollProgress");
     window.addEventListener("scroll", () => {
       const h = document.documentElement.scrollHeight - window.innerHeight;
@@ -1330,7 +1375,6 @@
     });
   }
 
-  // 启动
   initHeroSlides();
   buildRouteMap();
   renderChapters();

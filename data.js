@@ -1,4 +1,4 @@
-// 沐辰 2026 川西与西昌十二日山河画卷（10.29 — 11.09）
+// 致老妈 · 川西之旅音乐相册（10.29 — 11.09）
 // 所有游记文案均忠实保留妈妈朋友圈原文
 
 window.SITE_DATA = {
@@ -8,37 +8,13 @@ window.SITE_DATA = {
   birthdayDate: "2026.11.25",
   tripRange: "2026.10.29 — 11.09",
 
+  // 仅保留后两首配乐，不显示作者
   tracks: [
-    {
-      id: "spring",
-      title: "Spring Subway（开往春天的地铁）",
-      shortTitle: "Spring Subway",
-      artist: "Varlan",
-      chapterRange: "开篇 · 10.29 — 10.30",
-      bpm: 71,
-      beatSec: 0.845,
-      slideMs: 3600,
-      motionMood: "crisp",
-      src: "assets/audio/spring-subway.mp3"
-    },
-    {
-      id: "hometown",
-      title: "故郷の原風景（故乡的原风景）",
-      shortTitle: "故乡的原风景",
-      artist: "宗次郎",
-      chapterRange: "高原 · 10.31 — 11.04",
-      bpm: 64,
-      beatSec: 0.938,
-      slideMs: 4200,
-      motionMood: "majestic",
-      src: "assets/audio/hometown-ocarina.mp3"
-    },
     {
       id: "chengdu",
       title: "成都",
       shortTitle: "成都",
-      artist: "赵雷",
-      chapterRange: "巴蜀 · 11.05 — 11.07",
+      chapterRange: "开篇 · 川西高原至成都",
       bpm: 90,
       beatSec: 0.667,
       slideMs: 3400,
@@ -49,8 +25,7 @@ window.SITE_DATA = {
       id: "sunset",
       title: "SUNSET IN THE LAKE",
       shortTitle: "SUNSET IN THE LAKE",
-      artist: "DAISHI DANCE / 姫神",
-      chapterRange: "西昌与尾声 · 11.08 — 11.09",
+      chapterRange: "大石板 · 建昌 · 邛海与尾声",
       bpm: 118,
       beatSec: 0.508,
       slideMs: 3200,
@@ -65,17 +40,17 @@ window.SITE_DATA = {
     "route": 0,
     "ch-1029": 0,
     "ch-1030": 0,
-    "ch-1031": 1,
-    "ch-1101": 1,
-    "ch-1102": 1,
-    "ch-1103": 1,
-    "ch-1104": 1,
-    "ch-1105": 2,
-    "ch-1106": 2,
-    "ch-1107": 2,
-    "ch-1108": 3,
-    "ch-1109": 3,
-    "finale": 3
+    "ch-1031": 0,
+    "ch-1101": 0,
+    "ch-1102": 0,
+    "ch-1103": 0,
+    "ch-1104": 0,
+    "ch-1105": 0,
+    "ch-1106": 0,
+    "ch-1107": 0,
+    "ch-1108": 1,
+    "ch-1109": 1,
+    "finale": 1
   },
 
   heroSlides: [
@@ -103,28 +78,26 @@ window.SITE_DATA = {
     { id: "day-1109", date: "11.09", label: "建昌·邛海",  elev: 1510, x: 962, y: 196, chapterId: "ch-1109" }
   ],
 
-  // 12 天连续画卷章节：不同章节采用不同电影陈列形式（reel 轮放 / handscroll 连续画卷 / deck 叠影卡片 / intertitle 过场字幕）
   chapters: [
     {
       id: "ch-1029",
-      month: "10",
-      day: "29",
       date: "10月29日",
       shortDate: "10.29",
       location: "川西 · 双桥沟",
       shortPlace: "双桥沟",
       elevNum: 3480,
       elevation: "3,480m",
-      bgColor: "#1B1A16",
-      surfaceTint: "rgba(214, 154, 62, 0.14)",
+      bgColor: "#1B1914",
+      surfaceTint: "rgba(218, 160, 66, 0.16)",
       accent: "#E3A74A",
       presentation: "reel",
+      enterCut: "curtain",
       entries: [
         {
           caption: "雪山配彩林，川西已到了封神的季节",
           time: "23:34",
           mode: "reel",
-          transition: "dissolve",
+          cuts: ["curtain", "blur-zoom", "wipe-right", "flash-dissolve", "wipe-diag"],
           photos: [
             { src: "assets/photos/10-29/01.jpg", thumb: "assets/thumbs/10-29/01.jpg", orient: "L", alt: "雪峰与金色落叶松彩林" },
             { src: "assets/photos/10-29/02.jpg", thumb: "assets/thumbs/10-29/02.jpg", orient: "L", alt: "高原海子倒映雪山与秋色" },
@@ -141,18 +114,17 @@ window.SITE_DATA = {
     },
     {
       id: "ch-1030",
-      month: "10",
-      day: "30",
       date: "10月30日",
       shortDate: "10.30",
       location: "川西高原",
       shortPlace: "山野偶遇",
       elevNum: 3800,
       elevation: "3,800m",
-      bgColor: "#1E1F1B",
-      surfaceTint: "rgba(176, 152, 92, 0.12)",
+      bgColor: "#1D1E19",
+      surfaceTint: "rgba(182, 158, 96, 0.14)",
       accent: "#CFA95A",
       presentation: "spotlight",
+      enterCut: "iris",
       special: "marmot-cracker",
       entries: [
         {
@@ -167,19 +139,18 @@ window.SITE_DATA = {
     },
     {
       id: "ch-1031",
-      month: "10",
-      day: "31",
       date: "10月31日",
       shortDate: "10.31",
       location: "稻城亚丁 · 牛奶海与五色海",
       shortPlace: "稻城亚丁",
       elevNum: 4600,
       elevation: "4,600m",
-      bgColor: "#102029",
-      surfaceTint: "rgba(62, 166, 186, 0.16)",
+      bgColor: "#0F1E27",
+      surfaceTint: "rgba(62, 166, 186, 0.18)",
       accent: "#54C0D4",
       badge: "4,600m · 零吸氧登顶",
       presentation: "reel-reverse",
+      enterCut: "wipe-diag",
       entries: [
         {
           caption: "世界这本书，我又翻了一页\n有些地方，要走很远才到达\n稻城亚丁⛰️ 7:00出发，20:00到达，辛苦是真的，但到了才知道，那些路都值得\n十月末的稻城，雪山白得发亮，草甸黄得温柔，海子蓝得仿佛刺破了天空\n这就是秋天的童话",
@@ -190,7 +161,7 @@ window.SITE_DATA = {
           caption: "挑战的是海拔，更是自己，零吸氧登顶👍",
           time: "23:02",
           mode: "reel",
-          transition: "wipe",
+          cuts: ["iris", "wipe-diag", "blur-zoom", "curtain", "flash-dissolve"],
           photos: [
             { src: "assets/photos/10-31/05.jpg", thumb: "assets/thumbs/10-31/05.jpg", orient: "L", alt: "俯瞰雪山环抱中的牛奶海" },
             { src: "assets/photos/10-31/01.jpg", thumb: "assets/thumbs/10-31/01.jpg", orient: "L", alt: "五色海深邃湛蓝的高原秘境" },
@@ -207,18 +178,17 @@ window.SITE_DATA = {
     },
     {
       id: "ch-1101",
-      month: "11",
-      day: "01",
       date: "11月01日",
       shortDate: "11.01",
       location: "甘孜 · 墨石公园",
       shortPlace: "墨石公园",
       elevNum: 3500,
       elevation: "3,500m",
-      bgColor: "#171B21",
-      surfaceTint: "rgba(130, 152, 176, 0.14)",
+      bgColor: "#151920",
+      surfaceTint: "rgba(130, 152, 176, 0.16)",
       accent: "#9AB3CC",
       presentation: "handscroll",
+      enterCut: "wipe-right",
       entries: [
         {
           caption: "亿万年的地壳褶皱\n这是川西的暗黑浪漫",
@@ -240,18 +210,17 @@ window.SITE_DATA = {
     },
     {
       id: "ch-1102",
-      month: "11",
-      day: "02",
       date: "11月02日",
       shortDate: "11.02",
       location: "塔公 · 姑弄村",
       shortPlace: "姑弄村",
       elevNum: 3700,
       elevation: "3,700m",
-      bgColor: "#211C15",
-      surfaceTint: "rgba(206, 158, 86, 0.13)",
+      bgColor: "#201B14",
+      surfaceTint: "rgba(206, 158, 86, 0.14)",
       accent: "#DBA95A",
       presentation: "intertitle",
+      enterCut: "blur-zoom",
       entries: [
         {
           caption: "来姑弄村，浪费一个下午",
@@ -262,24 +231,23 @@ window.SITE_DATA = {
     },
     {
       id: "ch-1103",
-      month: "11",
-      day: "03",
       date: "11月03日",
       shortDate: "11.03",
       location: "八郎生都",
       shortPlace: "八郎生都",
       elevNum: 4340,
       elevation: "4,340m",
-      bgColor: "#111C2D",
-      surfaceTint: "rgba(84, 146, 224, 0.16)",
+      bgColor: "#101B2C",
+      surfaceTint: "rgba(84, 146, 224, 0.18)",
       accent: "#6EA9EC",
       presentation: "reel",
+      enterCut: "iris",
       entries: [
         {
           caption: "八郎生都\n拥有360°雪山环绕的浪漫",
           time: "",
           mode: "reel",
-          transition: "dissolve",
+          cuts: ["blur-zoom", "curtain", "iris", "wipe-right", "flash-dissolve"],
           photos: [
             { src: "assets/photos/11-03/01.jpg", thumb: "assets/thumbs/11-03/01.jpg", orient: "L", alt: "夕阳余晖洒满巍峨雪峰" },
             { src: "assets/photos/11-03/05.jpg", thumb: "assets/thumbs/11-03/05.jpg", orient: "P", alt: "漫天经幡天幕下的飒爽身影" },
@@ -296,18 +264,17 @@ window.SITE_DATA = {
     },
     {
       id: "ch-1104",
-      month: "11",
-      day: "04",
       date: "11月04日",
       shortDate: "11.04",
       location: "理塘 · 雅拉雪山",
       shortPlace: "理塘·雅拉",
       elevNum: 4014,
       elevation: "4,014m",
-      bgColor: "#1D1719",
-      surfaceTint: "rgba(218, 102, 66, 0.16)",
+      bgColor: "#1D1618",
+      surfaceTint: "rgba(218, 102, 66, 0.18)",
       accent: "#E87A54",
       presentation: "reel-reverse",
+      enterCut: "curtain",
       entries: [
         {
           caption: "爬上东山顶，看长青春科尔寺静立，看千户藏寨藏着人间烟火，来仁康古街追寻旧时光，风中有酥油的香气，耳边有缓缓转动的经筒声，这就是世界高城 -- 理塘",
@@ -318,7 +285,7 @@ window.SITE_DATA = {
           caption: "不爱城市霓虹喧嚣，也不恋远方异国。心之所向唯有高原旷野，这里氧气稀薄，信仰却足够厚重。当双脚抵达，心底那股感动，难以言喻。前路尚有无数山河未曾相逢，慢慢走，此生一一抵达。\n2026年秋于雅（亚）拉雪山",
           time: "",
           mode: "reel",
-          transition: "wipe",
+          cuts: ["wipe-diag", "flash-dissolve", "curtain", "blur-zoom", "iris"],
           photos: [
             { src: "assets/photos/11-04/01.jpg", thumb: "assets/thumbs/11-04/01.jpg", orient: "L", alt: "雪山旷野前张开双臂的剪影" },
             { src: "assets/photos/11-04/02.jpg", thumb: "assets/thumbs/11-04/02.jpg", orient: "P", alt: "立于越野车顶远眺雅拉神山" },
@@ -335,18 +302,17 @@ window.SITE_DATA = {
     },
     {
       id: "ch-1105",
-      month: "11",
-      day: "05",
       date: "11月05日",
       shortDate: "11.05",
       location: "康定 · 泸定桥",
       shortPlace: "康定·泸定",
       elevNum: 1320,
       elevation: "1,320m",
-      bgColor: "#221916",
-      surfaceTint: "rgba(196, 98, 72, 0.14)",
+      bgColor: "#211815",
+      surfaceTint: "rgba(196, 98, 72, 0.15)",
       accent: "#DF7F62",
       presentation: "intertitle",
+      enterCut: "wipe-right",
       entries: [
         {
           caption: "折多河穿城奔流，群山环抱着情歌故里，康定到此一遇，体会那句跑马溜溜的浪漫",
@@ -364,18 +330,17 @@ window.SITE_DATA = {
     },
     {
       id: "ch-1106",
-      month: "11",
-      day: "06",
       date: "11月06日",
       shortDate: "11.06",
       location: "成都老茶馆",
       shortPlace: "成都茶馆",
       elevNum: 500,
       elevation: "500m",
-      bgColor: "#231515",
-      surfaceTint: "rgba(202, 74, 62, 0.16)",
+      bgColor: "#221414",
+      surfaceTint: "rgba(202, 74, 62, 0.18)",
       accent: "#E3685B",
       presentation: "deck",
+      enterCut: "blur-zoom",
       entries: [
         {
           caption: "答案在路上，自由在风里\n一路高歌一路嗨",
@@ -399,18 +364,17 @@ window.SITE_DATA = {
     },
     {
       id: "ch-1107",
-      month: "11",
-      day: "07",
       date: "11月07日",
       shortDate: "11.07",
       location: "宜宾 · 兴文天泉洞",
       shortPlace: "兴文天泉洞",
       elevNum: 820,
       elevation: "820m",
-      bgColor: "#102026",
-      surfaceTint: "rgba(56, 152, 168, 0.16)",
+      bgColor: "#0F1E24",
+      surfaceTint: "rgba(56, 152, 168, 0.18)",
       accent: "#53B5C5",
       presentation: "intertitle",
+      enterCut: "iris",
       entries: [
         {
           caption: "世上溶洞万千，但却相似，看多了被五颜六色彩灯过度渲染的溶洞，来到兴文天泉洞，才看见喀斯特原本的模样，这里钟乳林立，暗河行舟，天光泻入，是大地本身的震撼",
@@ -428,18 +392,17 @@ window.SITE_DATA = {
     },
     {
       id: "ch-1108",
-      month: "11",
-      day: "08",
       date: "11月08日",
       shortDate: "11.08",
       location: "大凉山 · 螺髻温泉与大石板古村",
       shortPlace: "螺髻·大石板",
       elevNum: 1560,
       elevation: "1,560m",
-      bgColor: "#241712",
-      surfaceTint: "rgba(224, 114, 52, 0.16)",
+      bgColor: "#231611",
+      surfaceTint: "rgba(224, 114, 52, 0.18)",
       accent: "#EE8A49",
       presentation: "handscroll",
+      enterCut: "wipe-right",
       entries: [
         {
           caption: "藏在大凉山峡谷的秘境，螺髻九十九里温泉瀑布，今日特意来体验了一下，谁懂啊，居然换来了一人包池的快乐，浸在热泉里听瀑布，这才是旅行该有的松弛吧\n至于网上差评的卫生间和更衣室，现在已大大改观，新卫生间在最后一张图片哦",
@@ -466,24 +429,23 @@ window.SITE_DATA = {
     },
     {
       id: "ch-1109",
-      month: "11",
-      day: "09",
       date: "11月09日",
       shortDate: "11.09",
       location: "西昌 · 建昌古城与邛海",
       shortPlace: "建昌·邛海",
       elevNum: 1510,
       elevation: "1,510m",
-      bgColor: "#1B1615",
-      surfaceTint: "rgba(232, 166, 68, 0.16)",
+      bgColor: "#1A1514",
+      surfaceTint: "rgba(232, 166, 68, 0.18)",
       accent: "#F0B654",
       presentation: "reel",
+      enterCut: "curtain",
       entries: [
         {
           caption: "夜入建昌，灯火起，古意生",
           time: "11:14",
           mode: "reel",
-          transition: "dissolve",
+          cuts: ["flash-dissolve", "curtain", "blur-zoom", "wipe-diag", "iris"],
           subTitle: "建昌古城 · 夜色",
           photos: [
             { src: "assets/photos/11-09-jc/01.jpg", thumb: "assets/thumbs/11-09-jc/01.jpg", orient: "L", alt: "夜色中金碧辉煌的四牌楼" },
@@ -498,7 +460,7 @@ window.SITE_DATA = {
           caption: "来西昌，想赴一场星空之约，遗憾没能等来火箭划破天空，那就把这份震撼留给下次再见啦！环湖邛海，看遍邛海碧波，落脚小渔村，品味烟火烧烤，也算圆满😁",
           time: "",
           mode: "reel",
-          transition: "wipe",
+          cuts: ["wipe-right", "blur-zoom", "flash-dissolve", "iris", "curtain"],
           subTitle: "邛海 · 小渔村",
           photos: [
             { src: "assets/photos/11-09-qh/04.jpg", thumb: "assets/thumbs/11-09-qh/04.jpg", orient: "P", alt: "金色日落洒满邛海与笑颜" },

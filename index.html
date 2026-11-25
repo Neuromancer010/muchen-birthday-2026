@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>祝老妈生日快乐 · 川西十二日画卷</title>
-  <meta name="description" content="献给老妈（沐辰）的生日纪念画卷：2026.10.29—11.09 川西与西昌十二日纪行。" />
-  <meta property="og:title" content="祝老妈生日快乐 · 川西十二日画卷" />
-  <meta property="og:description" content="借时光之手，暖一束花开。10.29—11.09 川西与西昌十二日影像纪行。" />
+  <title>致老妈 · 生日快乐 | 川西之旅音乐相册</title>
+  <meta name="description" content="把这趟川西之旅做成一本音乐相册，作为今年的生日礼物。" />
+  <meta property="og:title" content="致老妈 · 生日快乐 | 川西之旅音乐相册" />
+  <meta property="og:description" content="把这趟川西之旅做成一本音乐相册，作为今年的生日礼物。借时光之手，暖一束花开。" />
   <meta property="og:image" content="https://neuromancer010.github.io/muchen-birthday-2026/assets/photos/10-29/01.jpg" />
   <meta property="og:url" content="https://neuromancer010.github.io/muchen-birthday-2026/" />
   <meta property="og:type" content="website" />
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- 全屏动态氛围层：随章节平滑变色 + 金秋微粒 / 礼花 / 孔明灯 -->
+  <!-- 全屏动态氛围层：随章节与画面柔和流转 -->
   <div class="ambient-bg" id="ambientBg" aria-hidden="true"></div>
   <canvas id="ambientCanvas" aria-hidden="true"></canvas>
 
@@ -23,7 +23,7 @@
   <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
   <!-- =========================================================
-       常驻电影级滚动日期与海拔 HUD（进入旅程后浮现）
+       常驻电影级滚动日期与海拔 HUD
   ========================================================= -->
   <header class="cinema-hud" id="cinemaHud" aria-label="行程日期与放映控制">
     <div class="hud-left">
@@ -40,58 +40,54 @@
     </div>
 
     <div class="hud-right">
-      <button class="hud-auto-btn" id="btnAutoPlay" type="button" title="像看剪辑短片一样自动流转画卷">
+      <button class="hud-auto-btn" id="btnAutoPlay" type="button" title="自动放映 / 暂停自动推进">
         <span class="auto-icon" id="autoPlayIcon">▶</span>
-        <span id="autoPlayLabel">自动放映</span>
+        <span id="autoPlayLabel">继续放映</span>
       </button>
     </div>
 
-    <!-- 展开式 12 日快捷跳转抽屉 -->
     <div class="hud-drawer" id="hudDrawer" aria-hidden="true">
       <div class="hud-drawer-grid" id="hudDrawerGrid"></div>
     </div>
   </header>
 
   <!-- =========================================================
-       ACT 0: 电影开场片头（封面轮放 + 展开画卷）
+       ACT 0: 电影开场片头（单一入口：开启画卷 = 伴乐自动放映）
   ========================================================= -->
   <section class="hero" id="top">
     <div class="hero-backdrop" id="heroBackdrop"></div>
     <div class="hero-vignette"></div>
 
     <div class="hero-inner">
-      <div class="hero-kicker reveal-instant">2026.11.25 · 致沐辰</div>
+      <div class="hero-kicker reveal-instant">2026.11.25 · 沐辰</div>
 
       <h1 class="hero-title reveal-instant delay-1">
-        <span class="title-top">生日快乐</span>
-        <span class="title-sub">川西十二日 · 10.29 — 11.09</span>
+        <span class="title-top">致老妈 · 生日快乐</span>
+        <span class="title-sub">把这趟川西之旅做成一本音乐相册，作为今年的生日礼物</span>
       </h1>
 
       <p class="hero-motto reveal-instant delay-2">“ 借时光之手，暖一束花开 ”</p>
 
       <div class="hero-actions reveal-instant delay-3">
-        <button class="btn-primary" id="btnEnterWithMusic" type="button">
+        <button class="btn-primary" id="btnOpenScroll" type="button">
           <span class="btn-icon">♫</span>
-          <span>开启声音 · 展开画卷</span>
-        </button>
-        <button class="btn-ghost" id="btnEnterAutoFilm" type="button">
-          <span>▶ 一键伴乐放映</span>
+          <span>开启画卷</span>
         </button>
       </div>
     </div>
 
     <div class="scroll-cue" id="scrollCue" aria-hidden="true">
-      <span>向下滑动画卷</span>
+      <span>10.29 — 11.09</span>
       <div class="scroll-line"></div>
     </div>
   </section>
 
   <!-- =========================================================
-       ACT 1: 克制真诚的生日祝福与吹蜡烛仪式
+       ACT 1: 生日寄语与互动吹蜡烛
   ========================================================= -->
   <section class="birthday-stage" id="birthday">
     <div class="container">
-      <div class="birthday-card unroll-reveal">
+      <div class="birthday-card cut-reveal cut-curtain">
         <div class="birthday-visual">
           <div class="cake-scene" id="cakeScene" role="button" tabindex="0" aria-label="轻触吹灭生日蜡烛">
             <div class="cake-glow" id="cakeGlow"></div>
@@ -147,7 +143,7 @@
               翻你这趟从川西到西昌的朋友圈，4,600 米的牛奶海不吸氧就上去了，雪山、彩林、老茶馆、大石板和邛海一路玩得特别尽兴。
             </p>
             <p>
-              把这十二天的照片和你的原话收进这一卷里，配了几首轻松的歌。新的一岁，祝你身体健康，吃好喝好，继续去更多想去的地方。
+              把这趟川西之旅的照片和你的原话做成一本音乐相册，作为今年的生日礼物。新的一岁，祝你身体健康，吃好喝好，继续去更多想去的地方。
             </p>
           </div>
           <div class="wish-revealed" id="wishRevealed" aria-live="polite">
@@ -159,41 +155,41 @@
   </section>
 
   <!-- =========================================================
-       ACT 2: 十二日海拔长卷总览（可点任意站点转场直达）
+       ACT 2: 海拔轨迹总览
   ========================================================= -->
   <section class="route-section" id="route">
     <div class="container">
-      <div class="route-head unroll-reveal">
-        <div class="eyebrow light">10.29 — 11.09 · ROUTE SCROLL</div>
-        <h2>十二日山河轨迹</h2>
+      <div class="route-head cut-reveal cut-blur-zoom">
+        <div class="eyebrow light">10.29 — 11.09 · ROUTE</div>
+        <h2>川西山河轨迹</h2>
       </div>
-      <div class="route-map-card unroll-reveal">
+      <div class="route-map-card cut-reveal cut-wipe-right">
         <div class="route-map-scroll">
-          <svg id="routeSvg" class="route-svg" viewBox="0 0 1020 315" preserveAspectRatio="xMidYMid meet" role="img" aria-label="10.29 至 11.09 川西与西昌十二日海拔行程路线图"></svg>
+          <svg id="routeSvg" class="route-svg" viewBox="0 0 1020 315" preserveAspectRatio="xMidYMid meet" role="img" aria-label="10.29 至 11.09 川西与西昌海拔行程路线图"></svg>
         </div>
       </div>
     </div>
   </section>
 
   <!-- =========================================================
-       ACT 3: 连续画卷 · 十二日电影剪辑式轮放章节
+       ACT 3: 连续画卷 · 电影切镜式音乐相册章节
   ========================================================= -->
   <main class="scroll-canvas" id="chaptersRoot"></main>
 
   <!-- =========================================================
-       ACT 4: 牛奶海封面尾声 + 孔明灯
+       ACT 4: 牛奶海封面尾声
   ========================================================= -->
   <section class="finale" id="finale">
     <div class="finale-bg" id="finaleBg"></div>
     <div class="finale-overlay"></div>
 
     <div class="container finale-inner">
-      <div class="finale-card unroll-reveal">
+      <div class="finale-card cut-reveal cut-iris">
         <div class="eyebrow light">2026 · 岁岁常安</div>
         <h2 class="finale-title">慢慢走，此生一一抵达</h2>
         <p class="finale-copy">
           西昌没等到的那场火箭，留给下一次。<br />
-          这一卷 10.29 到 11.09 的秋天，随时打开都在这里。<br />
+          这本川西之旅的音乐相册，随时打开都在这里。<br />
           老妈，生日快乐。
         </p>
 
@@ -205,18 +201,18 @@
       </div>
 
       <footer class="site-footer">
-        <p>沐辰 · 2026年11月25日</p>
+        <p>致老妈 · 2026年11月25日</p>
       </footer>
     </div>
   </section>
 
   <!-- =========================================================
-       悬浮黑胶音乐播放器（四首精选 · 章节平滑交叉淡入淡出）
+       悬浮黑胶音乐播放器（仅保留后两首，不显示作者）
   ========================================================= -->
   <aside class="music-dock" id="musicDock" aria-label="背景音乐控制器">
     <div class="music-popover" id="musicPopover" aria-hidden="true">
       <div class="mp-head">
-        <span class="mp-title">旅途原声带</span>
+        <span class="mp-title">相册配乐</span>
         <button class="mp-auto-btn active" id="btnAutoTrack" type="button">
           <span class="mp-auto-dot"></span>
           <span>随章节切歌</span>
@@ -234,11 +230,10 @@
           </span>
         </span>
         <span class="music-meta">
-          <span class="music-title" id="musicTitle">Spring Subway</span>
-          <span class="music-artist" id="musicArtist">Varlan</span>
+          <span class="music-title" id="musicTitle">成都</span>
         </span>
       </button>
-      <button class="music-icon-btn" id="musicListBtn" type="button" title="展开四首原声带" aria-label="展开歌单">
+      <button class="music-icon-btn" id="musicListBtn" type="button" title="展开歌单" aria-label="展开歌单">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <line x1="4" y1="7" x2="20" y2="7" />
           <line x1="4" y1="12" x2="20" y2="12" />
