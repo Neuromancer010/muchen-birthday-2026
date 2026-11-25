@@ -15,8 +15,11 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- 全屏动态氛围层：随章节与画面柔和流转 -->
+  <!-- 全屏动态氛围层：随章节与画面柔和流转 + 35mm 胶片质感 + 体积光束 + 切场扫光 -->
   <div class="ambient-bg" id="ambientBg" aria-hidden="true"></div>
+  <div class="ambient-beam" id="ambientBeam" aria-hidden="true"></div>
+  <div class="film-grain" aria-hidden="true"></div>
+  <div class="scene-sweep" id="sceneSweep" aria-hidden="true"></div>
   <canvas id="ambientCanvas" aria-hidden="true"></canvas>
 
   <!-- 顶部电影时间轴进度条 -->
@@ -40,10 +43,15 @@
     </div>
 
     <div class="hud-right">
+      <button class="hud-next-btn" id="btnAutoNext" type="button" title="切至下一幕" aria-label="切至下一幕">下一幕 ›</button>
       <button class="hud-auto-btn" id="btnAutoPlay" type="button" title="自动放映 / 暂停自动推进">
         <span class="auto-icon" id="autoPlayIcon">▶</span>
         <span id="autoPlayLabel">继续放映</span>
       </button>
+    </div>
+
+    <div class="hud-dwell-track" aria-hidden="true">
+      <div class="hud-dwell-fill" id="hudDwellFill"></div>
     </div>
 
     <div class="hud-drawer" id="hudDrawer" aria-hidden="true">

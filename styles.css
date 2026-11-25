@@ -59,12 +59,64 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .ambient-bg {
   position: fixed;
   inset: 0;
-  z-index: -2;
+  z-index: -3;
   background-color: var(--scene-bg);
   background-image:
-    radial-gradient(ellipse 85% 60% at 24% 20%, var(--scene-tint), transparent 66%),
-    radial-gradient(ellipse 72% 58% at 80% 78%, rgba(255, 220, 156, 0.07), transparent 66%);
-  transition: background-color 1.25s ease;
+    radial-gradient(ellipse 88% 62% at 22% 18%, var(--scene-tint), transparent 66%),
+    radial-gradient(ellipse 76% 60% at 82% 80%, rgba(255, 220, 156, 0.08), transparent 66%);
+  transition: background-color 1.35s ease;
+}
+
+/* 电影级缓慢流转体积光束（随章节强调色呼吸流光） */
+.ambient-beam {
+  position: fixed;
+  inset: -18%;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 46% 24% at 32% 24%, color-mix(in srgb, var(--scene-accent) 18%, transparent), transparent 72%),
+    radial-gradient(ellipse 38% 28% at 74% 68%, color-mix(in srgb, var(--scene-accent) 13%, transparent), transparent 74%);
+  filter: blur(44px);
+  opacity: 0.72;
+  animation: beamDrift 18s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+@keyframes beamDrift {
+  0%   { transform: translate3d(-3%, -2%, 0) rotate(-3deg) scale(1); opacity: 0.58; }
+  50%  { transform: translate3d(3%, 2%, 0) rotate(2deg) scale(1.06); opacity: 0.82; }
+  100% { transform: translate3d(-1%, 3%, 0) rotate(-1deg) scale(1.02); opacity: 0.64; }
+}
+
+/* 极细腻 35mm 胶片颗粒叠层，统一画布与影像质感 */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 24;
+  pointer-events: none;
+  opacity: 0.036;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+}
+
+/* 自动放映切幕时的电影变形宽银幕光晕扫过 */
+.scene-sweep {
+  position: fixed;
+  inset: 0;
+  z-index: 48;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    linear-gradient(108deg, transparent 22%, rgba(255, 228, 174, 0.22) 48%, rgba(255, 250, 236, 0.34) 51%, rgba(255, 212, 140, 0.14) 56%, transparent 78%);
+  mix-blend-mode: screen;
+}
+.scene-sweep.sweeping {
+  animation: cinemaSceneSweep 1.05s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes cinemaSceneSweep {
+  0%   { opacity: 0; transform: translateX(-80%); }
+  32%  { opacity: 0.9; }
+  100% { opacity: 0; transform: translateX(85%); }
 }
 
 #ambientCanvas {
@@ -198,6 +250,27 @@ body.lightbox-open .music-toast {
 
 .hud-caret { font-size: 0.7rem; opacity: 0.6; }
 
+.hud-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hud-next-btn {
+  display: none;
+  align-items: center;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 232, 190, 0.16);
+  color: rgba(255, 244, 224, 0.88);
+  font-size: 0.74rem;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.hud-next-btn:hover { background: rgba(255, 232, 190, 0.2); color: #FFF8EC; }
+.cinema-hud.auto-active .hud-next-btn { display: inline-flex; }
+
 .hud-auto-btn {
   display: inline-flex;
   align-items: center;
@@ -218,6 +291,28 @@ body.lightbox-open .music-toast {
   color: #1A120A;
   border-color: transparent;
   font-weight: 600;
+}
+
+/* 顶部 HUD 底部极细每幕阅读倒计时流光条 */
+.hud-dwell-track {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 99px;
+  background: rgba(255, 232, 190, 0.08);
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.cinema-hud.auto-active .hud-dwell-track { opacity: 1; }
+.hud-dwell-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, rgba(242, 194, 102, 0.65), #FFE7AF);
+  box-shadow: 0 0 8px rgba(242, 194, 102, 0.7);
+  transform-origin: left center;
 }
 
 .hud-drawer {
@@ -318,11 +413,17 @@ body.lightbox-open .music-toast {
   font-size: clamp(1.88rem, 7.1vw, 4.3rem);
   letter-spacing: 0.08em;
   white-space: nowrap;
-  background: linear-gradient(135deg, #FFFDF8 0%, #FFE4AE 55%, #EBB154 100%);
+  background: linear-gradient(115deg, #FFFDF8 0%, #FFE4AE 36%, #FFF8E6 50%, #EBB154 68%, #FFFDF8 100%);
+  background-size: 220% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   text-shadow: 0 14px 44px rgba(0, 0, 0, 0.36);
+  animation: titleGoldShimmer 7.5s ease-in-out infinite;
+}
+@keyframes titleGoldShimmer {
+  0%, 100% { background-position: 10% 50%; }
+  50%      { background-position: 90% 50%; }
 }
 
 .title-sub {
@@ -582,13 +683,35 @@ body.lightbox-open .music-toast {
 }
 
 .bridge-line {
+  position: relative;
   flex: 1;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--ch-accent, #E3A74A), transparent);
   transform: scaleX(0);
   transform-origin: left center;
   transition: transform 1.15s var(--cut-ease);
-  opacity: 0.52;
+  opacity: 0.56;
+  overflow: visible;
+}
+.bridge-line::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 36px;
+  height: 3px;
+  border-radius: 99px;
+  transform: translateY(-50%);
+  background: radial-gradient(circle, #FFF8E2 0%, var(--ch-accent, #E3A74A) 50%, transparent 100%);
+  opacity: 0;
+}
+.date-bridge.in-view .bridge-line::after {
+  animation: bridgeSpark 1.4s var(--cut-ease) 0.35s forwards;
+}
+@keyframes bridgeSpark {
+  0%   { left: 0%; opacity: 0; }
+  25%  { opacity: 1; }
+  100% { left: calc(100% - 36px); opacity: 0; }
 }
 .bridge-line.right { transform-origin: right center; }
 .date-bridge.in-view .bridge-line { transform: scaleX(1); }
@@ -655,7 +778,26 @@ body.lightbox-open .music-toast {
   padding-left: 18px;
   border-left: 2px solid var(--ch-accent, #E3A74A);
 }
+.quote-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(10px);
+  filter: blur(4px);
+  transition:
+    opacity 0.85s var(--cut-ease) calc(var(--li, 0) * 140ms),
+    transform 0.85s var(--cut-ease) calc(var(--li, 0) * 140ms),
+    filter 0.85s ease calc(var(--li, 0) * 140ms);
+}
+.in-view .quote-line {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
 .mom-quote-meta { font-size: 0.78rem; color: var(--ink-muted); letter-spacing: 0.08em; padding-left: 20px; }
+
+.cinema-entry-anchor {
+  scroll-margin-top: 84px;
+}
 
 .chapter-prelude-note {
   max-width: 760px;
@@ -784,20 +926,22 @@ body.lightbox-open .music-toast {
   pointer-events: auto;
 }
 
-/* 帧间 6 种真实剪辑切镜动画 */
-.reel-slide.active.anim-curtain       { animation: slideCutCurtain 0.92s var(--cut-ease) forwards; }
-.reel-slide.active.anim-wipe-right    { animation: slideCutWipeRight 0.92s var(--cut-ease) forwards; }
-.reel-slide.active.anim-wipe-diag     { animation: slideCutWipeDiag 0.96s var(--cut-ease) forwards; }
-.reel-slide.active.anim-iris          { animation: slideCutIris 0.96s var(--cut-ease) forwards; }
-.reel-slide.active.anim-blur-zoom     { animation: slideCutBlurZoom 0.88s var(--cut-ease) forwards; }
-.reel-slide.active.anim-flash-dissolve{ animation: slideCutDissolve 0.86s ease forwards; }
+/* 帧间 8 种真实剪辑切镜动画 */
+.reel-slide.active.anim-curtain       { animation: slideCutCurtain 0.95s var(--cut-ease) forwards; }
+.reel-slide.active.anim-wipe-right    { animation: slideCutWipeRight 0.95s var(--cut-ease) forwards; }
+.reel-slide.active.anim-wipe-diag     { animation: slideCutWipeDiag 0.98s var(--cut-ease) forwards; }
+.reel-slide.active.anim-iris          { animation: slideCutIris 0.98s var(--cut-ease) forwards; }
+.reel-slide.active.anim-blur-zoom     { animation: slideCutBlurZoom 0.92s var(--cut-ease) forwards; }
+.reel-slide.active.anim-flash-dissolve{ animation: slideCutDissolve 0.9s ease forwards; }
+.reel-slide.active.anim-prism-bloom   { animation: slideCutPrismBloom 1.05s var(--cut-ease) forwards; }
+.reel-slide.active.anim-tilt-push     { animation: slideCutTiltPush 1.02s var(--cut-ease) forwards; }
 
 @keyframes slideCutCurtain {
-  0%   { clip-path: inset(0 50% 0 50%); filter: brightness(1.12); }
-  100% { clip-path: inset(0 0% 0 0%);   filter: brightness(1); }
+  0%   { clip-path: inset(0 50% 0 50%); filter: brightness(1.16) saturate(1.12); }
+  100% { clip-path: inset(0 0% 0 0%);   filter: brightness(1) saturate(1); }
 }
 @keyframes slideCutWipeRight {
-  0%   { clip-path: inset(0 100% 0 0); transform: scale(1.03); }
+  0%   { clip-path: inset(0 100% 0 0); transform: scale(1.035); }
   100% { clip-path: inset(0 0% 0 0);   transform: scale(1); }
 }
 @keyframes slideCutWipeDiag {
@@ -805,16 +949,25 @@ body.lightbox-open .music-toast {
   100% { clip-path: polygon(0 0, 145% 0, 100% 100%, 0 100%); }
 }
 @keyframes slideCutIris {
-  0%   { clip-path: circle(0% at 50% 50%); filter: brightness(1.18); }
+  0%   { clip-path: circle(0% at 50% 50%); filter: brightness(1.22); }
   100% { clip-path: circle(110% at 50% 50%); filter: brightness(1); }
 }
 @keyframes slideCutBlurZoom {
-  0%   { opacity: 0; filter: blur(18px) brightness(1.24); transform: scale(1.14); }
+  0%   { opacity: 0; filter: blur(18px) brightness(1.26); transform: scale(1.14); }
   100% { opacity: 1; filter: blur(0) brightness(1); transform: scale(1); }
 }
 @keyframes slideCutDissolve {
-  0%   { opacity: 0; transform: scale(1.04); }
+  0%   { opacity: 0; transform: scale(1.045); }
   100% { opacity: 1; transform: scale(1); }
+}
+@keyframes slideCutPrismBloom {
+  0%   { opacity: 0; filter: blur(12px) brightness(1.42) contrast(1.15) saturate(1.38); transform: scale(1.09); }
+  45%  { opacity: 1; filter: blur(3px) brightness(1.14) saturate(1.15); }
+  100% { opacity: 1; filter: blur(0) brightness(1) contrast(1) saturate(1); transform: scale(1); }
+}
+@keyframes slideCutTiltPush {
+  0%   { opacity: 0; transform: perspective(1100px) translateZ(-70px) rotateY(-4.5deg) scale(1.06); filter: blur(6px) brightness(1.15); }
+  100% { opacity: 1; transform: perspective(1100px) translateZ(0) rotateY(0deg) scale(1); filter: blur(0) brightness(1); }
 }
 
 /* 双层电影景深：竖图柔和虚化背景融于画幅 */

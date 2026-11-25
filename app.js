@@ -45,15 +45,17 @@
   }
 
   // ------------------------------------------------------------------------
-  // 2. 全屏轻量 Canvas 粒子引擎
+  // 2. 全屏章节自适应电影氛围粒子引擎（秋叶 / 雪晶 / 碧水光斑 / 暖灯星火）
   // ------------------------------------------------------------------------
   const AmbientFX = (() => {
     const canvas = $("#ambientCanvas");
     const ctx = canvas.getContext("2d");
     let W = 0, H = 0, dpr = 1;
     let speedScale = 1.0;
+    let atmosphere = "autumn"; // autumn | snow | water | lantern
 
     const motes = [];
+    const bokehs = [];
     const bursts = [];
     const lanterns = [];
 
@@ -67,19 +69,41 @@
     }
 
     function initMotes() {
-      const count = W < 640 ? 12 : 20;
+      const count = W < 640 ? 18 : 30;
       motes.length = 0;
       for (let i = 0; i < count; i++) {
         motes.push({
           x: Math.random() * W,
           y: Math.random() * H,
-          r: 1.8 + Math.random() * 3.4,
-          vy: 0.18 + Math.random() * 0.36,
-          vx: -0.18 + Math.random() * 0.36,
+          r: 2.0 + Math.random() * 4.2,
+          vy: 0.22 + Math.random() * 0.44,
+          vx: -0.24 + Math.random() * 0.48,
           sway: Math.random() * Math.PI * 2,
-          swaySpeed: 0.008 + Math.random() * 0.012,
-          alpha: 0.18 + Math.random() * 0.34
+          swaySpeed: 0.01 + Math.random() * 0.016,
+          rot: Math.random() * Math.PI * 2,
+          rotSpd: (Math.random() - 0.5) * 0.024,
+          alpha: 0.2 + Math.random() * 0.36,
+          isLeaf: i % 3 === 0
         });
+      }
+      const bCount = W < 640 ? 4 : 7;
+      bokehs.length = 0;
+      for (let i = 0; i < bCount; i++) {
+        bokehs.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: 36 + Math.random() * 68,
+          vx: (Math.random() - 0.5) * 0.14,
+          vy: -0.06 - Math.random() * 0.1,
+          phase: Math.random() * Math.PI * 2,
+          alpha: 0.045 + Math.random() * 0.055
+        });
+      }
+    }
+
+    function setAtmosphere(kind) {
+      if (kind && ["autumn", "snow", "water", "lantern"].includes(kind)) {
+        atmosphere = kind;
       }
     }
 
@@ -117,27 +141,119 @@
       speedScale = Math.max(0.76, Math.min(1.2, bpm / 92));
     }
 
+    function drawLeaf(p) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.globalAlpha = p.alpha * 0.9;
+      const g = ctx.createLinearGradient(-p.r * 1.4, 0, p.r * 1.4, 0);
+      g.addColorStop(0, "rgba(244, 186, 84, 0.95)");
+      g.addColorStop(1, "rgba(222, 114, 52, 0.85)");
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.moveTo(-p.r * 1.6, 0);
+      ctx.quadraticCurveTo(0, -p.r * 1.15, p.r * 1.6, 0);
+      ctx.quadraticCurveTo(0, p.r * 1.15, -p.r * 1.6, 0);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawSnowGlint(p) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.globalAlpha = p.alpha * (0.75 + 0.25 * Math.sin(p.sway * 2));
+      const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, p.r * 2.2);
+      grad.addColorStop(0, "rgba(235, 250, 255, 0.96)");
+      grad.addColorStop(0.45, "rgba(150, 218, 245, 0.48)");
+      grad.addColorStop(1, "rgba(120, 196, 235, 0)");
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(0, 0, p.r * 2.2, 0, Math.PI * 2);
+      ctx.fill();
+      if (p.isLeaf) {
+        ctx.strokeStyle = "rgba(240, 252, 255, 0.55)";
+        ctx.lineWidth = 0.7;
+        ctx.beginPath();
+        ctx.moveTo(-p.r * 1.5, 0); ctx.lineTo(p.r * 1.5, 0);
+        ctx.moveTo(0, -p.r * 1.5); ctx.lineTo(0, p.r * 1.5);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function drawWaterCaustic(p) {
+      ctx.save();
+      ctx.globalAlpha = p.alpha * (0.72 + 0.28 * Math.sin(p.sway * 2.2));
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2.8);
+      grad.addColorStop(0, "rgba(162, 244, 248, 0.92)");
+      grad.addColorStop(0.5, "rgba(84, 198, 214, 0.34)");
+      grad.addColorStop(1, "rgba(62, 166, 186, 0)");
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 2.8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawWarmSpark(p, crimsonBias) {
+      ctx.save();
+      ctx.globalAlpha = p.alpha * (0.7 + 0.3 * Math.sin(p.sway * 2.4));
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2.6);
+      grad.addColorStop(0, crimsonBias ? "rgba(255, 214, 140, 0.98)" : "rgba(255, 224, 152, 0.95)");
+      grad.addColorStop(0.5, crimsonBias ? "rgba(238, 128, 66, 0.38)" : "rgba(244, 184, 88, 0.28)");
+      grad.addColorStop(1, "rgba(255, 180, 90, 0)");
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 2.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
     function tick() {
       ctx.clearRect(0, 0, W, H);
 
+      // 柔和电影镜头散景光斑（低频缓慢呼吸）
+      const bokehColor = atmosphere === "snow" ? "136, 208, 245"
+        : atmosphere === "water" ? "84, 212, 220"
+        : atmosphere === "lantern" ? "244, 154, 78"
+        : "242, 194, 102";
+
+      for (const bk of bokehs) {
+        bk.phase += 0.008 * speedScale;
+        bk.x += bk.vx * speedScale;
+        bk.y += bk.vy * speedScale;
+        if (bk.y < -bk.r) { bk.y = H + bk.r; bk.x = Math.random() * W; }
+        if (bk.x < -bk.r) bk.x = W + bk.r;
+        if (bk.x > W + bk.r) bk.x = -bk.r;
+        const a = bk.alpha * (0.72 + 0.28 * Math.sin(bk.phase));
+        const g = ctx.createRadialGradient(bk.x, bk.y, 0, bk.x, bk.y, bk.r);
+        g.addColorStop(0, `rgba(${bokehColor}, ${a})`);
+        g.addColorStop(0.6, `rgba(${bokehColor}, ${a * 0.35})`);
+        g.addColorStop(1, `rgba(${bokehColor}, 0)`);
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(bk.x, bk.y, bk.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
       for (const p of motes) {
         p.sway += p.swaySpeed * speedScale;
-        p.x += (p.vx + Math.sin(p.sway) * 0.32) * speedScale;
-        p.y += p.vy * speedScale;
-        if (p.y > H + 14) { p.y = -12; p.x = Math.random() * W; }
-        if (p.x < -14) p.x = W + 12;
-        if (p.x > W + 14) p.x = -12;
+        p.rot += p.rotSpd * speedScale;
+        const driftX = (p.vx + Math.sin(p.sway) * 0.42) * speedScale;
+        // 水汽与灯火星火轻盈上升，秋叶与雪晶轻柔飘落
+        const dirY = (atmosphere === "water" || atmosphere === "lantern") ? -0.78 : 1.0;
+        p.x += driftX;
+        p.y += p.vy * dirY * speedScale;
+        if (p.y > H + 18) { p.y = -14; p.x = Math.random() * W; }
+        if (p.y < -18) { p.y = H + 14; p.x = Math.random() * W; }
+        if (p.x < -18) p.x = W + 14;
+        if (p.x > W + 18) p.x = -14;
 
-        ctx.save();
-        ctx.globalAlpha = p.alpha;
-        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2.4);
-        grad.addColorStop(0, "rgba(255, 224, 152, 0.95)");
-        grad.addColorStop(1, "rgba(255, 200, 100, 0)");
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * 2.4, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+        if (atmosphere === "autumn" && p.isLeaf) drawLeaf(p);
+        else if (atmosphere === "snow") drawSnowGlint(p);
+        else if (atmosphere === "water") drawWaterCaustic(p);
+        else drawWarmSpark(p, atmosphere === "lantern");
       }
 
       for (let i = bursts.length - 1; i >= 0; i--) {
@@ -203,7 +319,7 @@
     window.addEventListener("resize", () => { resize(); initMotes(); });
     requestAnimationFrame(tick);
 
-    return { spawnBurst, spawnLantern, setTempo };
+    return { spawnBurst, spawnLantern, setTempo, setAtmosphere };
   })();
 
   // ------------------------------------------------------------------------
@@ -298,10 +414,13 @@
       requestAnimationFrame(step);
     }
 
-    function startCurrent(silentToast = false) {
+    function startCurrent(silentToast = false, restartFromZero = false) {
       const tr = DATA.tracks[currentIdx];
       if (!activeDeck.src || !activeDeck.src.endsWith(tr.src)) {
         activeDeck.src = tr.src;
+      }
+      if (restartFromZero) {
+        try { activeDeck.currentTime = 0; } catch (_) {}
       }
       activeDeck.volume = 0.02;
       const p = activeDeck.play();
@@ -385,7 +504,25 @@
     updateUI();
 
     return {
-      playFromGesture() { startCurrent(true); },
+      playFromGesture(restartFirst = false) {
+        if (restartFirst) {
+          autoSwitch = true;
+          autoBtn.classList.add("active");
+          if (currentIdx !== 0) {
+            selectTrack(0, true);
+          } else {
+            startCurrent(true, true);
+          }
+        } else {
+          startCurrent(true, false);
+        }
+      },
+      ensureTrack(idx) {
+        if (!autoSwitch || !isPlaying || !unlocked) return;
+        if (typeof idx === "number" && idx !== currentIdx) {
+          selectTrack(idx, false);
+        }
+      },
       onSectionVisible(sectionId) {
         if (!autoSwitch || !isPlaying || !unlocked) return;
         const targetIdx = DATA.sectionTrackMap[sectionId];
@@ -410,8 +547,11 @@
     const drawer = $("#hudDrawer");
     const drawerGrid = $("#hudDrawerGrid");
     const autoBtn = $("#btnAutoPlay");
+    const autoNextBtn = $("#btnAutoNext");
     const autoIcon = $("#autoPlayIcon");
     const autoLabel = $("#autoPlayLabel");
+    const dwellFill = $("#hudDwellFill");
+    const sceneSweep = $("#sceneSweep");
 
     let curDate = "10.29";
     let curElev = 3480;
@@ -467,6 +607,7 @@
       document.documentElement.style.setProperty("--scene-bg", ch.bgColor);
       document.documentElement.style.setProperty("--scene-tint", ch.surfaceTint);
       document.documentElement.style.setProperty("--scene-accent", ch.accent);
+      if (ch.atmosphere) AmbientFX.setAtmosphere(ch.atmosphere);
 
       if (ch.shortDate !== curDate) {
         curDate = ch.shortDate;
@@ -486,57 +627,159 @@
       });
     }
 
+    // ----------------------------------------------------------------------
+    // 逐幕阅读时间 + 两首歌完整时长自动放映编排引擎
+    // ----------------------------------------------------------------------
+    function calcReadingSec(text) {
+      const len = String(text || "").replace(/\s+/g, "").length;
+      return 5.0 + len * 0.17;
+    }
+
+    function buildAutoPlan() {
+      const steps = [
+        { id: "birthday", trackIdx: 0, rawSec: 18, minSec: 15, block: "start", label: "生日寄语" },
+        { id: "route",    trackIdx: 0, rawSec: 11, minSec: 9,  block: "start", label: "行程轨迹" }
+      ];
+
+      DATA.chapters.forEach((ch) => {
+        const trackIdx = DATA.sectionTrackMap[ch.id] ?? 0;
+        ch.entries.forEach((en, idx) => {
+          const readSec = calcReadingSec(en.caption);
+          let mediaSec = 10;
+          if (en.mode === "reel") {
+            mediaSec = (en.photos ? en.photos.length : 6) * 3.1;
+          } else if (en.mode === "handscroll") {
+            mediaSec = 24;
+          } else if (en.mode === "deck") {
+            mediaSec = 20;
+          } else if (en.mode === "video" && en.video) {
+            mediaSec = Math.min(34, Math.max(14, (en.video.duration || 20) * 0.52));
+          }
+          // 确保阅读时间与画面欣赏时间充分叠加，不匆忙切幕
+          const rawSec = Math.max(readSec + 7.5, mediaSec * 0.72 + readSec * 0.65);
+          steps.push({
+            id: `entry-${ch.id}-${idx}`,
+            chapterId: ch.id,
+            trackIdx,
+            rawSec,
+            minSec: Math.max(12, Math.round(readSec + 4)),
+            block: idx === 0 ? "start" : "center",
+            label: `${ch.shortDate} · ${en.subTitle || ch.shortPlace}`
+          });
+        });
+      });
+
+      steps.push({ id: "finale", trackIdx: 1, rawSec: 18, minSec: 14, block: "start", label: "尾声" });
+
+      // 按两首歌各自真实时长归一化每幕停留时间，使整场放映精确铺满两首歌
+      [0, 1].forEach((tIdx) => {
+        const group = steps.filter((s) => s.trackIdx === tIdx);
+        const targetSec = (DATA.tracks[tIdx] && DATA.tracks[tIdx].durationSec) || 300;
+        const rawSum = group.reduce((acc, s) => acc + s.rawSec, 0) || 1;
+        group.forEach((s) => {
+          const scaled = (s.rawSec / rawSum) * targetSec;
+          s.dwellMs = Math.round(Math.max(s.minSec, scaled) * 1000);
+        });
+        // 二次微调，保证总和紧贴单曲时长
+        const curSumMs = group.reduce((acc, s) => acc + s.dwellMs, 0);
+        const targetMs = targetSec * 1000;
+        if (Math.abs(curSumMs - targetMs) > 2000 && group.length) {
+          const ratio = targetMs / curSumMs;
+          group.forEach((s) => {
+            s.dwellMs = Math.round(Math.max(s.minSec * 1000, s.dwellMs * ratio));
+          });
+        }
+      });
+
+      return steps;
+    }
+
+    let autoPlan = null;
     let autoFilmRunning = false;
     let autoTimer = null;
-    const sequenceIds = ["birthday", "route", ...DATA.chapters.map((c) => c.id), "finale"];
     let seqIdx = 0;
+
+    function triggerSceneSweep() {
+      if (!sceneSweep) return;
+      sceneSweep.classList.remove("sweeping");
+      void sceneSweep.offsetWidth;
+      sceneSweep.classList.add("sweeping");
+    }
+
+    function animateDwellBar(ms) {
+      if (!dwellFill) return;
+      dwellFill.style.transition = "none";
+      dwellFill.style.width = "0%";
+      void dwellFill.offsetWidth;
+      dwellFill.style.transition = `width ${ms}ms linear`;
+      dwellFill.style.width = "100%";
+    }
 
     function stopAutoFilm(silent = false) {
       if (!autoFilmRunning) return;
       autoFilmRunning = false;
       clearTimeout(autoTimer);
+      hud.classList.remove("auto-active");
       autoBtn.classList.remove("active");
       autoIcon.textContent = "▶";
       autoLabel.textContent = "继续放映";
+      if (dwellFill) {
+        dwellFill.style.transition = "none";
+        dwellFill.style.width = "0%";
+      }
       if (!silent) MusicEngine.showToast("已切回自由浏览");
     }
 
     function advanceFilm() {
       if (!autoFilmRunning) return;
-      if (seqIdx >= sequenceIds.length) {
+      if (!autoPlan) autoPlan = buildAutoPlan();
+      if (seqIdx >= autoPlan.length) {
         stopAutoFilm(true);
-        MusicEngine.showToast("画卷放映完毕");
+        MusicEngine.showToast("两首乐章与川西画卷已放映完毕");
         return;
       }
-      const id = sequenceIds[seqIdx++];
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
 
-      const ch = DATA.chapters.find((c) => c.id === id);
-      const hasMultiMedia = ch && ch.entries.length > 1;
-      const dwell = id === "route" ? 4200
-        : id === "birthday" ? 6600
-        : hasMultiMedia ? 13000
-        : 10500;
-      autoTimer = setTimeout(advanceFilm, dwell);
+      const step = autoPlan[seqIdx++];
+      if (seqIdx > 1) triggerSceneSweep();
+
+      // 精确同步曲目切换（前半程第一首，后半程进入康定无缝切第二首）
+      MusicEngine.ensureTrack(step.trackIdx);
+
+      const el = document.getElementById(step.id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: step.block || "center" });
+      }
+      if (step.chapterId) {
+        const chObj = DATA.chapters.find((c) => c.id === step.chapterId);
+        if (chObj) setChapter(chObj);
+      }
+
+      animateDwellBar(step.dwellMs);
+      clearTimeout(autoTimer);
+      autoTimer = setTimeout(advanceFilm, step.dwellMs);
     }
 
     function startAutoFilm(fromStart = false) {
-      MusicEngine.playFromGesture();
+      if (!autoPlan) autoPlan = buildAutoPlan();
+      MusicEngine.playFromGesture(fromStart);
       autoFilmRunning = true;
+      hud.classList.add("auto-active");
       autoBtn.classList.add("active");
       autoIcon.textContent = "❚❚";
       autoLabel.textContent = "放映中";
+
       if (fromStart) {
         seqIdx = 0;
       } else {
-        const curIdx = sequenceIds.findIndex((id) => {
-          const el = document.getElementById(id);
-          return el && el.getBoundingClientRect().top >= -120;
+        const curIdx = autoPlan.findIndex((s) => {
+          const el = document.getElementById(s.id);
+          return el && el.getBoundingClientRect().top >= -140;
         });
         seqIdx = curIdx >= 0 ? curIdx : 0;
       }
-      MusicEngine.showToast("♫ 正在放映 · 随时滑动可自由浏览");
+
+      const totalMin = Math.round(autoPlan.reduce((a, b) => a + b.dwellMs, 0) / 60000);
+      MusicEngine.showToast(`♫ 正在放映（约 ${totalMin} 分钟 · 两首配乐全程伴奏）`);
       clearTimeout(autoTimer);
       advanceFilm();
     }
@@ -545,6 +788,11 @@
       if (autoFilmRunning) stopAutoFilm();
       else startAutoFilm(false);
     });
+    if (autoNextBtn) {
+      autoNextBtn.addEventListener("click", () => {
+        if (autoFilmRunning) advanceFilm();
+      });
+    }
 
     ["wheel", "touchmove"].forEach((evt) => {
       window.addEventListener(evt, () => {
@@ -811,7 +1059,7 @@
     storyCol.innerHTML = `
       ${ch.badge ? `<span class="story-badge">⛰ ${ch.badge}</span>` : ""}
       ${entry.subTitle ? `<div class="story-sublabel">${entry.subTitle}</div>` : ""}
-      <p class="mom-quote">${escapeHtml(entry.caption)}</p>
+      <p class="mom-quote">${formatQuoteLines(entry.caption)}</p>
       <div class="mom-quote-meta">${metaTime} · ${photos.length} 帧轮放</div>
     `;
 
@@ -819,7 +1067,8 @@
 
     const ALL_CUT_CLASSES = [
       "anim-curtain", "anim-wipe-right", "anim-wipe-diag",
-      "anim-iris", "anim-blur-zoom", "anim-flash-dissolve"
+      "anim-iris", "anim-blur-zoom", "anim-flash-dissolve",
+      "anim-prism-bloom", "anim-tilt-push"
     ];
 
     let idx = 0;
@@ -840,11 +1089,11 @@
       aura.style.backgroundImage = `url("${photos[idx].thumb}")`;
 
       // 触发胶片闪白或漏光扫边特效
-      if (cutName === "flash-dissolve" || cutName === "blur-zoom") {
+      if (cutName === "flash-dissolve" || cutName === "blur-zoom" || cutName === "prism-bloom") {
         flashLayer.classList.remove("firing");
         void flashLayer.offsetWidth;
         flashLayer.classList.add("firing");
-      } else if (cutName === "wipe-right" || cutName === "wipe-diag") {
+      } else if (cutName === "wipe-right" || cutName === "wipe-diag" || cutName === "tilt-push") {
         streakLayer.classList.remove("sweeping");
         void streakLayer.offsetWidth;
         streakLayer.classList.add("sweeping");
@@ -926,7 +1175,7 @@
     head.className = "handscroll-header cut-reveal cut-blur-zoom";
     const hasClock = entry.time && entry.time.includes(":");
     head.innerHTML = `
-      <p class="mom-quote">${escapeHtml(entry.caption)}</p>
+      <p class="mom-quote">${formatQuoteLines(entry.caption)}</p>
       <div class="mom-quote-meta">${hasClock ? `${ch.date} ${entry.time}` : ch.date} · 横轴画卷</div>
     `;
     wrap.appendChild(head);
@@ -1074,7 +1323,7 @@
     const storyCol = document.createElement("div");
     storyCol.className = "cinema-story-col cut-reveal cut-blur-zoom";
     storyCol.innerHTML = `
-      <p class="mom-quote">${escapeHtml(entry.caption)}</p>
+      <p class="mom-quote">${formatQuoteLines(entry.caption)}</p>
       <div class="mom-quote-meta">${ch.date} ${entry.time || ""} · 叠影轮播</div>
     `;
 
@@ -1202,7 +1451,7 @@
     const metaTime = hasClock ? `${ch.date} ${entry.time}` : ch.date;
     storyCol.innerHTML = `
       ${entry.subTitle ? `<div class="story-sublabel">${entry.subTitle}</div>` : ""}
-      <p class="mom-quote">${escapeHtml(entry.caption)}</p>
+      <p class="mom-quote">${formatQuoteLines(entry.caption)}</p>
       <div class="mom-quote-meta">${metaTime} · 动态影像 ${totalStr}</div>
     `;
 
@@ -1402,6 +1651,13 @@
     return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
+  function formatQuoteLines(str) {
+    return String(str || "")
+      .split("\n")
+      .map((line, i) => `<span class="quote-line" style="--li:${i}">${escapeHtml(line)}</span>`)
+      .join("");
+  }
+
   // ------------------------------------------------------------------------
   // 8. 渲染全部连续画卷章节
   // ------------------------------------------------------------------------
@@ -1448,43 +1704,44 @@
         container.appendChild(grid);
       } else {
         let stageCount = 0;
-        ch.entries.forEach((en) => {
+        ch.entries.forEach((en, entryIdx) => {
+          let node = null;
           if (en.mode === "note") {
-            const note = document.createElement("article");
-            note.className = "chapter-prelude-note cut-reveal cut-blur-zoom";
-            note.innerHTML = `
-              <p class="mom-quote">${escapeHtml(en.caption)}</p>
+            node = document.createElement("article");
+            node.className = "chapter-prelude-note cut-reveal cut-blur-zoom";
+            node.innerHTML = `
+              <p class="mom-quote">${formatQuoteLines(en.caption)}</p>
               <div class="mom-quote-meta">${ch.date} ${en.time || ""}</div>
             `;
-            container.appendChild(note);
           } else if (en.mode === "video") {
             const reverse = ch.presentation === "reel-reverse"
               ? (stageCount % 2 === 0)
               : (stageCount % 2 === 1);
-            const node = createCinemaVideo(ch, en, reverse);
+            node = createCinemaVideo(ch, en, reverse);
             if (stageCount > 0) node.classList.add("dual-reel-gap");
             stageCount++;
-            container.appendChild(node);
           } else if (en.mode === "reel") {
             const reverse = ch.presentation === "reel-reverse"
               ? (stageCount % 2 === 0)
               : (stageCount % 2 === 1);
-            const node = createCinemaReel(ch, en, reverse);
+            node = createCinemaReel(ch, en, reverse);
             if (stageCount > 0) node.classList.add("dual-reel-gap");
             stageCount++;
-            container.appendChild(node);
           } else if (en.mode === "handscroll") {
-            const node = createHandscroll(ch, en);
+            node = createHandscroll(ch, en);
             if (stageCount > 0) node.classList.add("dual-reel-gap");
             stageCount++;
-            container.appendChild(node);
           } else if (en.mode === "deck") {
-            const node = createCardDeck(ch, en);
+            node = createCardDeck(ch, en);
             if (stageCount > 0) node.classList.add("dual-reel-gap");
             stageCount++;
-            container.appendChild(node);
           } else if (en.mode === "spotlight") {
-            container.appendChild(createSpotlight(ch, en));
+            node = createSpotlight(ch, en);
+          }
+          if (node) {
+            node.id = `entry-${ch.id}-${entryIdx}`;
+            node.classList.add("cinema-entry-anchor");
+            container.appendChild(node);
           }
         });
       }
@@ -1614,8 +1871,10 @@
         if (id === "top") {
           CinemaHUD.setVisible(false);
           document.documentElement.style.setProperty("--scene-bg", "#14171E");
+          AmbientFX.setAtmosphere("autumn");
         } else {
           CinemaHUD.setVisible(true);
+          if (id === "finale") AmbientFX.setAtmosphere("lantern");
         }
 
         if (chapterMap[id]) {
@@ -1628,10 +1887,27 @@
     sections.forEach((s) => secObs.observe(s));
 
     const bar = $("#scrollProgress");
+    const auras = $$(".stage-aura");
+    let parallaxTick = false;
     window.addEventListener("scroll", () => {
       const h = document.documentElement.scrollHeight - window.innerHeight;
       const pct = h > 0 ? Math.min(100, Math.max(0, (window.scrollY / h) * 100)) : 0;
       bar.style.width = `${pct}%`;
+
+      if (!parallaxTick) {
+        parallaxTick = true;
+        requestAnimationFrame(() => {
+          const vh = window.innerHeight || 900;
+          for (const a of auras) {
+            const rect = a.parentElement.getBoundingClientRect();
+            if (rect.bottom < -120 || rect.top > vh + 120) continue;
+            const norm = ((rect.top + rect.height * 0.5) / vh - 0.5) * 2;
+            const shift = Math.max(-22, Math.min(22, norm * 18));
+            a.style.transform = `translate3d(0, ${shift.toFixed(1)}px, 0)`;
+          }
+          parallaxTick = false;
+        });
+      }
     }, { passive: true });
   }
 

@@ -7,16 +7,17 @@ window.SITE_DATA = {
   birthdayDate: "2026.11.25",
   tripRange: "2026.10.29 — 11.09",
 
-  // 仅保留后两首配乐，不显示作者
+  // 双曲原声（不显示作者；自动放映总时长精确匹配两首歌完整时长）
   tracks: [
     {
       id: "chengdu",
       title: "成都",
       shortTitle: "成都",
-      chapterRange: "开篇 · 川西高原至成都",
+      chapterRange: "开篇 · 双桥沟至雅拉雪山",
       bpm: 90,
       beatSec: 0.667,
-      slideMs: 3400,
+      slideMs: 3600,
+      durationSec: 328,
       motionMood: "folk",
       src: "assets/audio/chengdu.mp3"
     },
@@ -24,10 +25,11 @@ window.SITE_DATA = {
       id: "sunset",
       title: "SUNSET IN THE LAKE",
       shortTitle: "SUNSET IN THE LAKE",
-      chapterRange: "大石板 · 建昌 · 邛海与尾声",
+      chapterRange: "康定 · 成都 · 兴文 · 西昌与尾声",
       bpm: 118,
       beatSec: 0.508,
-      slideMs: 3200,
+      slideMs: 3400,
+      durationSec: 418,
       motionMood: "luminous",
       src: "assets/audio/sunset-in-the-lake.mp3"
     }
@@ -44,9 +46,9 @@ window.SITE_DATA = {
     "ch-1102": 0,
     "ch-1103": 0,
     "ch-1104": 0,
-    "ch-1105": 0,
-    "ch-1106": 0,
-    "ch-1107": 0,
+    "ch-1105": 1,
+    "ch-1106": 1,
+    "ch-1107": 1,
     "ch-1108": 1,
     "ch-1109": 1,
     "finale": 1
@@ -89,6 +91,7 @@ window.SITE_DATA = {
       bgColor: "#1B1914",
       surfaceTint: "rgba(218, 160, 66, 0.16)",
       accent: "#E3A74A",
+      atmosphere: "autumn",
       presentation: "reel",
       enterCut: "curtain",
       entries: [
@@ -96,7 +99,7 @@ window.SITE_DATA = {
           caption: "雪山配彩林，川西已到了封神的季节",
           time: "23:34",
           mode: "reel",
-          cuts: ["curtain", "blur-zoom", "wipe-right", "flash-dissolve", "wipe-diag"],
+          cuts: ["curtain", "prism-bloom", "wipe-right", "tilt-push", "blur-zoom", "flash-dissolve", "wipe-diag"],
           photos: [
             { src: "assets/photos/10-29/01.jpg", thumb: "assets/thumbs/10-29/01.jpg", orient: "L", alt: "雪峰与金色落叶松彩林" },
             { src: "assets/photos/10-29/02.jpg", thumb: "assets/thumbs/10-29/02.jpg", orient: "L", alt: "高原海子倒映雪山与秋色" },
@@ -122,6 +125,7 @@ window.SITE_DATA = {
       bgColor: "#1D1E19",
       surfaceTint: "rgba(182, 158, 96, 0.14)",
       accent: "#CFA95A",
+      atmosphere: "autumn",
       presentation: "video",
       enterCut: "iris",
       special: "marmot-cracker",
@@ -151,6 +155,7 @@ window.SITE_DATA = {
       bgColor: "#0F1E27",
       surfaceTint: "rgba(62, 166, 186, 0.18)",
       accent: "#54C0D4",
+      atmosphere: "snow",
       badge: "4,600m · 零吸氧登顶",
       presentation: "reel-reverse",
       enterCut: "wipe-diag",
@@ -172,7 +177,7 @@ window.SITE_DATA = {
           caption: "挑战的是海拔，更是自己，零吸氧登顶👍",
           time: "23:02",
           mode: "reel",
-          cuts: ["iris", "wipe-diag", "blur-zoom", "curtain", "flash-dissolve"],
+          cuts: ["iris", "prism-bloom", "wipe-diag", "tilt-push", "blur-zoom", "curtain", "flash-dissolve"],
           photos: [
             { src: "assets/photos/10-31/05.jpg", thumb: "assets/thumbs/10-31/05.jpg", orient: "L", alt: "俯瞰雪山环抱中的牛奶海" },
             { src: "assets/photos/10-31/01.jpg", thumb: "assets/thumbs/10-31/01.jpg", orient: "L", alt: "五色海深邃湛蓝的高原秘境" },
@@ -198,6 +203,7 @@ window.SITE_DATA = {
       bgColor: "#151920",
       surfaceTint: "rgba(130, 152, 176, 0.16)",
       accent: "#9AB3CC",
+      atmosphere: "snow",
       presentation: "handscroll",
       enterCut: "wipe-right",
       entries: [
@@ -230,6 +236,7 @@ window.SITE_DATA = {
       bgColor: "#201B14",
       surfaceTint: "rgba(206, 158, 86, 0.14)",
       accent: "#DBA95A",
+      atmosphere: "autumn",
       presentation: "video",
       enterCut: "blur-zoom",
       entries: [
@@ -258,6 +265,7 @@ window.SITE_DATA = {
       bgColor: "#101B2C",
       surfaceTint: "rgba(84, 146, 224, 0.18)",
       accent: "#6EA9EC",
+      atmosphere: "snow",
       presentation: "reel",
       enterCut: "iris",
       entries: [
@@ -265,7 +273,7 @@ window.SITE_DATA = {
           caption: "八郎生都\n拥有360°雪山环绕的浪漫",
           time: "",
           mode: "reel",
-          cuts: ["blur-zoom", "curtain", "iris", "wipe-right", "flash-dissolve"],
+          cuts: ["tilt-push", "curtain", "prism-bloom", "iris", "wipe-right", "blur-zoom", "flash-dissolve"],
           photos: [
             { src: "assets/photos/11-03/01.jpg", thumb: "assets/thumbs/11-03/01.jpg", orient: "L", alt: "夕阳余晖洒满巍峨雪峰" },
             { src: "assets/photos/11-03/05.jpg", thumb: "assets/thumbs/11-03/05.jpg", orient: "P", alt: "漫天经幡天幕下的飒爽身影" },
@@ -291,6 +299,7 @@ window.SITE_DATA = {
       bgColor: "#1D1618",
       surfaceTint: "rgba(218, 102, 66, 0.18)",
       accent: "#E87A54",
+      atmosphere: "autumn",
       presentation: "reel-reverse",
       enterCut: "curtain",
       entries: [
@@ -311,7 +320,7 @@ window.SITE_DATA = {
           caption: "不爱城市霓虹喧嚣，也不恋远方异国。心之所向唯有高原旷野，这里氧气稀薄，信仰却足够厚重。当双脚抵达，心底那股感动，难以言喻。前路尚有无数山河未曾相逢，慢慢走，此生一一抵达。\n2026年秋于雅（亚）拉雪山",
           time: "",
           mode: "reel",
-          cuts: ["wipe-diag", "flash-dissolve", "curtain", "blur-zoom", "iris"],
+          cuts: ["wipe-diag", "prism-bloom", "flash-dissolve", "curtain", "tilt-push", "blur-zoom", "iris"],
           photos: [
             { src: "assets/photos/11-04/01.jpg", thumb: "assets/thumbs/11-04/01.jpg", orient: "L", alt: "雪山旷野前张开双臂的剪影" },
             { src: "assets/photos/11-04/02.jpg", thumb: "assets/thumbs/11-04/02.jpg", orient: "P", alt: "立于越野车顶远眺雅拉神山" },
@@ -337,6 +346,7 @@ window.SITE_DATA = {
       bgColor: "#211815",
       surfaceTint: "rgba(196, 98, 72, 0.15)",
       accent: "#DF7F62",
+      atmosphere: "water",
       presentation: "video",
       enterCut: "wipe-right",
       entries: [
@@ -379,6 +389,7 @@ window.SITE_DATA = {
       bgColor: "#221414",
       surfaceTint: "rgba(202, 74, 62, 0.18)",
       accent: "#E3685B",
+      atmosphere: "lantern",
       presentation: "deck",
       enterCut: "blur-zoom",
       entries: [
@@ -421,6 +432,7 @@ window.SITE_DATA = {
       bgColor: "#0F1E24",
       surfaceTint: "rgba(56, 152, 168, 0.18)",
       accent: "#53B5C5",
+      atmosphere: "water",
       presentation: "video",
       enterCut: "iris",
       entries: [
@@ -463,6 +475,7 @@ window.SITE_DATA = {
       bgColor: "#231611",
       surfaceTint: "rgba(224, 114, 52, 0.18)",
       accent: "#EE8A49",
+      atmosphere: "water",
       presentation: "handscroll",
       enterCut: "wipe-right",
       entries: [
@@ -508,6 +521,7 @@ window.SITE_DATA = {
       bgColor: "#1A1514",
       surfaceTint: "rgba(232, 166, 68, 0.18)",
       accent: "#F0B654",
+      atmosphere: "lantern",
       presentation: "reel",
       enterCut: "curtain",
       entries: [
@@ -515,7 +529,7 @@ window.SITE_DATA = {
           caption: "夜入建昌，灯火起，古意生",
           time: "11:14",
           mode: "reel",
-          cuts: ["flash-dissolve", "curtain", "blur-zoom", "wipe-diag", "iris"],
+          cuts: ["prism-bloom", "flash-dissolve", "curtain", "tilt-push", "blur-zoom", "wipe-diag", "iris"],
           subTitle: "建昌古城 · 夜色",
           photos: [
             { src: "assets/photos/11-09-jc/01.jpg", thumb: "assets/thumbs/11-09-jc/01.jpg", orient: "L", alt: "夜色中金碧辉煌的四牌楼" },
@@ -530,7 +544,7 @@ window.SITE_DATA = {
           caption: "来西昌，想赴一场星空之约，遗憾没能等来火箭划破天空，那就把这份震撼留给下次再见啦！环湖邛海，看遍邛海碧波，落脚小渔村，品味烟火烧烤，也算圆满😁",
           time: "",
           mode: "reel",
-          cuts: ["wipe-right", "blur-zoom", "flash-dissolve", "iris", "curtain"],
+          cuts: ["wipe-right", "prism-bloom", "tilt-push", "blur-zoom", "flash-dissolve", "iris", "curtain"],
           subTitle: "邛海 · 小渔村",
           photos: [
             { src: "assets/photos/11-09-qh/04.jpg", thumb: "assets/thumbs/11-09-qh/04.jpg", orient: "P", alt: "金色日落洒满邛海与笑颜" },
