@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>祝老妈生日快乐 · 川西十二日山河志</title>
+  <meta name="description" content="献给老妈（沐辰）的生日礼物：10.29—11.09 川西与西昌十二日山河光影纪行，愿岁岁常欢愉，山河皆可期。" />
+  <meta property="og:title" content="祝老妈生日快乐 · 川西十二日山河志" />
+  <meta property="og:description" content="借时光之手，暖一束花开。珍藏 10.29—11.09 川西与西昌十二日最美风景与心情。" />
+  <meta property="og:image" content="https://neuromancer010.github.io/muchen-birthday-2026/assets/photos/10-29/01.jpg" />
+  <meta property="og:url" content="https://neuromancer010.github.io/muchen-birthday-2026/" />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#191F2B" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- 全屏粒子画布（秋叶金光 / 生日礼花 / 孔明灯） -->
+  <canvas id="ambientCanvas" aria-hidden="true"></canvas>
+
+  <!-- 顶部轻量进度条 -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- =========================================================
+       ACT 0: 沉浸式生日开场封面
+  ========================================================= -->
+  <header class="hero" id="top">
+    <div class="hero-backdrop" id="heroBackdrop"></div>
+    <div class="hero-vignette"></div>
+
+    <div class="hero-inner">
+      <div class="hero-badge reveal-instant">
+        <span class="badge-dot"></span>
+        <span>2026 · 献给最爱的老妈 · 沐辰</span>
+      </div>
+
+      <p class="hero-motto reveal-instant delay-1">“ 借时光之手，暖一束花开 ”</p>
+
+      <h1 class="hero-title reveal-instant delay-2">
+        <span class="title-top">生日快乐</span>
+        <span class="title-sub">与你的川西十二日山河志</span>
+      </h1>
+
+      <p class="hero-lead reveal-instant delay-3">
+        从 <strong>10.29</strong> 封神的雪山彩林，到 <strong>4,600m</strong> 零吸氧登顶牛奶海，<br class="br-desktop" />
+        再一路穿过墨石异星、八郎生都、雅拉经幡、成都茶馆与西昌邛海的日落烟火。<br class="br-desktop" />
+        把这一整趟炽热又自由的秋天，装订成一份只属于你的生日礼物。
+      </p>
+
+      <div class="hero-actions reveal-instant delay-4">
+        <button class="btn-primary" id="btnEnterWithMusic" type="button">
+          <span class="btn-icon">♫</span>
+          <span>开启生日礼物 · 伴乐启程</span>
+        </button>
+        <button class="btn-ghost" id="btnEnterSilent" type="button">
+          <span>静静翻阅</span>
+        </button>
+      </div>
+
+      <div class="hero-stats reveal-instant delay-5">
+        <div class="stat-item">
+          <span class="stat-num">12</span>
+          <span class="stat-label">日山河旅途</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">4,600<small>m</small></span>
+          <span class="stat-label">零吸氧登顶</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">76</span>
+          <span class="stat-label">帧光影珍藏</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-cue" id="scrollCue" aria-hidden="true">
+      <span>向下展开旅程</span>
+      <div class="scroll-line"></div>
+    </div>
+  </header>
+
+  <!-- =========================================================
+       ACT 1: 互动生日祝福与吹蜡烛仪式
+  ========================================================= -->
+  <section class="birthday-stage" id="birthday">
+    <div class="container">
+      <div class="birthday-card reveal">
+        <div class="birthday-visual">
+          <div class="cake-scene" id="cakeScene" role="button" tabindex="0" aria-label="点击许愿吹灭生日蜡烛">
+            <div class="cake-glow" id="cakeGlow"></div>
+            <svg class="cake-svg" viewBox="0 0 280 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 盘子 -->
+              <ellipse cx="140" cy="216" rx="112" ry="18" fill="#E8DCC8" />
+              <ellipse cx="140" cy="212" rx="100" ry="13" fill="#F8F2E7" />
+              <!-- 底层蛋糕 -->
+              <rect x="52" y="148" width="176" height="60" rx="18" fill="#F3D6B3" />
+              <path d="M52 164 C74 176, 92 152, 114 166 C136 180, 152 154, 174 168 C196 180, 212 158, 228 166 L228 156 C228 148, 220 144, 210 144 L70 144 C60 144, 52 148, 52 156 Z" fill="#FFF8EE" />
+              <!-- 装饰浆果与金箔 -->
+              <circle cx="84" cy="184" r="5" fill="#D4573B" />
+              <circle cx="140" cy="188" r="5.5" fill="#C88A32" />
+              <circle cx="196" cy="184" r="5" fill="#D4573B" />
+              <circle cx="112" cy="180" r="3" fill="#E8B85C" />
+              <circle cx="168" cy="180" r="3" fill="#E8B85C" />
+              <!-- 上层蛋糕 -->
+              <rect x="80" y="98" width="120" height="52" rx="14" fill="#F7E0C4" />
+              <path d="M80 114 C96 125, 110 105, 126 116 C142 127, 154 106, 170 117 C184 126, 192 112, 200 116 L200 106 C200 98, 192 94, 184 94 L96 94 C88 94, 80 98, 80 106 Z" fill="#FFFDF8" />
+              <!-- 顶部装饰水果 -->
+              <circle cx="102" cy="94" r="5.5" fill="#D4573B" />
+              <circle cx="178" cy="94" r="5.5" fill="#D4573B" />
+              <circle cx="140" cy="96" r="4" fill="#E2A441" />
+
+              <!-- 三根蜡烛 -->
+              <g class="candles">
+                <rect x="108" y="60" width="9" height="36" rx="4" fill="#E68A5C" />
+                <rect x="135.5" y="50" width="9" height="46" rx="4" fill="#C84B31" />
+                <rect x="163" y="60" width="9" height="36" rx="4" fill="#2F8F9D" />
+                <!-- 烛芯 -->
+                <line x1="112.5" y1="60" x2="112.5" y2="54" stroke="#4A3A32" stroke-width="2" stroke-linecap="round" />
+                <line x1="140" y1="50" x2="140" y2="44" stroke="#4A3A32" stroke-width="2" stroke-linecap="round" />
+                <line x1="167.5" y1="60" x2="167.5" y2="54" stroke="#4A3A32" stroke-width="2" stroke-linecap="round" />
+              </g>
+
+              <!-- 火焰组（可吹灭） -->
+              <g class="flames" id="cakeFlames">
+                <g class="flame f1">
+                  <path d="M112.5 34 C118 42, 119 49, 112.5 54 C106 49, 107 42, 112.5 34 Z" fill="#FF9E3D" />
+                  <path d="M112.5 41 C115.5 46, 115.5 50, 112.5 53 C109.5 50, 109.5 46, 112.5 41 Z" fill="#FFF3B0" />
+                </g>
+                <g class="flame f2">
+                  <path d="M140 22 C146.5 31, 147.5 39, 140 44 C132.5 39, 133.5 31, 140 22 Z" fill="#FF922B" />
+                  <path d="M140 30 C143.5 35.5, 143.5 40, 140 43 C136.5 40, 136.5 35.5, 140 30 Z" fill="#FFF7C2" />
+                </g>
+                <g class="flame f3">
+                  <path d="M167.5 34 C173 42, 174 49, 167.5 54 C161 49, 162 42, 167.5 34 Z" fill="#FF9E3D" />
+                  <path d="M167.5 41 C170.5 46, 170.5 50, 167.5 53 C164.5 50, 164.5 46, 167.5 41 Z" fill="#FFF3B0" />
+                </g>
+              </g>
+
+              <!-- 吹灭后的轻烟 -->
+              <g class="smoke-group" id="cakeSmoke">
+                <path class="smoke s1" d="M112.5 52 C108 42, 118 34, 112 22" stroke="#B6AEA4" stroke-width="2" stroke-linecap="round" fill="none" />
+                <path class="smoke s2" d="M140 42 C135 30, 146 22, 139 8" stroke="#B6AEA4" stroke-width="2" stroke-linecap="round" fill="none" />
+                <path class="smoke s3" d="M167.5 52 C172 42, 162 34, 168 22" stroke="#B6AEA4" stroke-width="2" stroke-linecap="round" fill="none" />
+              </g>
+            </svg>
+            <div class="cake-hint" id="cakeHint">轻触蛋糕 · 许愿吹灭蜡烛</div>
+          </div>
+
+          <div class="cake-controls">
+            <button class="btn-cake" id="btnBlowCandles" type="button">
+              ✨ 许个愿，吹灭蜡烛
+            </button>
+          </div>
+        </div>
+
+        <div class="birthday-letter">
+          <div class="letter-eyebrow">HAPPY BIRTHDAY · 2026.11.25</div>
+          <h2 class="letter-heading" id="wishHeading">亲爱的老妈，生日快乐！</h2>
+          <div class="letter-body" id="wishBody">
+            <p>
+              翻看你这趟川西和西昌的朋友圈，嘴角一直忍不住往上扬——
+              别人去稻城亚丁都吸着氧慢慢挪，你偏偏<strong>零吸氧登顶 4,600 米牛奶海</strong>；
+              看见两只旱獭打架，随手一句<em>“别打了，雪饼我给”</em>幽默得不行；
+              在雅拉雪山撒风马、在成都老茶馆喝茶听戏、在大石板穿一身彝装笑得像少女，
+              在邛海日落里吃着烧烤说“也算圆满”。
+            </p>
+            <p>
+              你一直这样眼里有光、脚下有风，把寻常日子和万里山河都过得滚烫又自在。
+              新的一岁，愿你身体永远像在高原上一样硬朗轻盈，愿你去向所有心之所向的旷野与花海，
+              <strong>前路尚有无数山河未曾相逢，我们慢慢走，此生一一抵达。</strong>
+            </p>
+          </div>
+          <div class="wish-revealed" id="wishRevealed" aria-live="polite">
+            <span class="wish-spark">🎂</span>
+            <span>愿望已乘着高原的风寄往星河——愿老妈岁岁常欢愉，万事皆顺意，平安喜乐，永远自由炽热！</span>
+          </div>
+          <div class="letter-sign">—— 永远爱你、为你骄傲的儿子</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       ACT 2: 川西十二日互动海拔路线图 + 吸顶日期导航
+  ========================================================= -->
+  <section class="route-section" id="route">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="eyebrow">THE JOURNEY · 2026.10.29 — 11.09</div>
+        <h2>十二日山河海拔志</h2>
+        <p class="section-desc">从 3,480 米的彩林雪山一路攀升至 4,600 米稻城牛奶海，再缓缓下山浸入成都茶香、兴文溶洞与西昌暖阳。轻点任意站点，直达那天的风景与心情。</p>
+      </div>
+
+      <div class="route-map-card reveal">
+        <div class="route-map-scroll">
+          <svg id="routeSvg" class="route-svg" viewBox="0 0 1020 315" preserveAspectRatio="xMidYMid meet" role="img" aria-label="10.29 至 11.09 川西与西昌十二日海拔行程路线图"></svg>
+        </div>
+        <div class="route-legend">
+          <span><i class="dot-gold"></i>点击地图任意节点跳转对应日期</span>
+          <span><i class="dot-peak"></i>4,000m+ 高原巅峰站点</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 吸顶快速跳转日期栏 -->
+  <nav class="day-nav" id="dayNav" aria-label="按日期浏览川西行程">
+    <div class="day-nav-inner" id="dayNavInner"></div>
+  </nav>
+
+  <!-- =========================================================
+       ACT 3: 12 天沉浸式图文游记（动态渲染全部 19 条朋友圈）
+  ========================================================= -->
+  <main class="chapters-root" id="chaptersRoot"></main>
+
+  <!-- =========================================================
+       ACT 4: 牛奶海封面珍藏 + 生日孔明灯祈愿尾声
+  ========================================================= -->
+  <section class="finale" id="finale">
+    <div class="finale-bg" id="finaleBg"></div>
+    <div class="finale-overlay"></div>
+
+    <div class="container finale-inner">
+      <div class="finale-card reveal">
+        <div class="eyebrow light">TO BE CONTINUED · 下一程山河</div>
+        <h2 class="finale-title">借时光之手，暖一束花开</h2>
+        <p class="finale-copy">
+          那场西昌未等来的火箭，留给下一次奔赴星空；<br />
+          这趟 10.29 到 11.09 的雪山、海子、经幡、古巷与灯火，已为你妥帖珍藏在这里。<br />
+          以后无论什么时候想回味这趟秋天，打开这个页面，音乐响起，山风就又吹过来了。
+        </p>
+
+        <div class="finale-actions">
+          <button class="btn-lantern" id="btnLantern" type="button">
+            <span>🏮 放飞一盏生日祈愿灯</span>
+          </button>
+          <button class="btn-outline-light" id="btnBackTop" type="button">
+            <span>↑ 回到开篇</span>
+          </button>
+        </div>
+        <div class="lantern-counter" id="lanternCounter"></div>
+      </div>
+
+      <footer class="site-footer">
+        <p>为老妈（沐辰）定制 · 2026年11月25日生日纪念</p>
+        <p class="footer-sub">图文取材自 10.29–11.09 朋友圈珍藏 · 精选四首旅途原声伴乐</p>
+      </footer>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       悬浮黑胶音乐播放器（四首精选 · 章节自动渐变切歌 + 手动点歌）
+  ========================================================= -->
+  <aside class="music-dock" id="musicDock" aria-label="背景音乐控制器">
+    <div class="music-popover" id="musicPopover" aria-hidden="true">
+      <div class="mp-head">
+        <span class="mp-title">旅途原声带</span>
+        <button class="mp-auto-btn active" id="btnAutoTrack" type="button" title="随浏览章节自动渐变切换配乐">
+          <span class="mp-auto-dot"></span>
+          <span>随章节切歌</span>
+        </button>
+      </div>
+      <div class="mp-list" id="mpTrackList"></div>
+    </div>
+
+    <div class="music-pill">
+      <button class="music-toggle" id="musicToggle" type="button" aria-label="播放或暂停背景音乐">
+        <span class="vinyl-wrap" aria-hidden="true">
+          <span class="vinyl-pulse"></span>
+          <span class="vinyl" id="vinylDisc">
+            <span class="vinyl-core"></span>
+          </span>
+        </span>
+        <span class="music-meta">
+          <span class="music-title" id="musicTitle">Spring Subway</span>
+          <span class="music-artist" id="musicArtist">Varlan</span>
+        </span>
+      </button>
+      <button class="music-icon-btn" id="musicListBtn" type="button" title="展开四首旅途歌单" aria-label="展开歌单">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="4" y1="7" x2="20" y2="7" />
+          <line x1="4" y1="12" x2="20" y2="12" />
+          <line x1="4" y1="17" x2="14" y2="17" />
+        </svg>
+      </button>
+      <button class="music-icon-btn" id="musicNext" type="button" title="切换下一首配乐" aria-label="切换下一首背景音乐">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M5 5.5v13l9.5-6.5L5 5.5zm11.5 0h2.5v13h-2.5v-13z" />
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- 切歌轻提示 Toast -->
+  <div class="music-toast" id="musicToast" aria-live="polite"></div>
+
+  <!-- 双音轨平滑交叉淡入淡出音频节点 -->
+  <audio id="bgmDeckA" preload="none" loop playsinline></audio>
+  <audio id="bgmDeckB" preload="none" loop playsinline></audio>
+
+  <!-- =========================================================
+       全屏高清画廊 Lightbox（支持键盘、点击与手机左右滑动）
+  ========================================================= -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="lightbox-backdrop" id="lbBackdrop"></div>
+    <div class="lightbox-topbar">
+      <span class="lb-counter" id="lbCounter">1 / 9</span>
+      <span class="lb-chapter" id="lbChapter">10月29日 · 川西</span>
+      <button class="lb-close" id="lbClose" type="button" aria-label="关闭大图">✕</button>
+    </div>
+    <button class="lb-nav lb-prev" id="lbPrev" type="button" aria-label="上一张">‹</button>
+    <div class="lightbox-stage" id="lbStage">
+      <img id="lbImg" src="" alt="" />
+    </div>
+    <button class="lb-nav lb-next" id="lbNext" type="button" aria-label="下一张">›</button>
+    <div class="lightbox-caption" id="lbCaption"></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,567 @@
+{
+  "10-29": [
+    {
+      "src": "assets/photos/10-29/01.jpg",
+      "thumb": "assets/thumbs/10-29/01.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/10-29/02.jpg",
+      "thumb": "assets/thumbs/10-29/02.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/10-29/03.jpg",
+      "thumb": "assets/thumbs/10-29/03.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/10-29/04.jpg",
+      "thumb": "assets/thumbs/10-29/04.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/10-29/05.jpg",
+      "thumb": "assets/thumbs/10-29/05.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/10-29/06.jpg",
+      "thumb": "assets/thumbs/10-29/06.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/10-29/07.jpg",
+      "thumb": "assets/thumbs/10-29/07.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/10-29/08.jpg",
+      "thumb": "assets/thumbs/10-29/08.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/10-29/09.jpg",
+      "thumb": "assets/thumbs/10-29/09.jpg",
+      "w": 1440,
+      "h": 1080
+    }
+  ],
+  "10-30-vid": [
+    {
+      "src": "assets/photos/10-30-vid/still.jpg",
+      "thumb": "assets/thumbs/10-30-vid/still.jpg",
+      "w": 1600,
+      "h": 1086,
+      "isVideoStill": true
+    }
+  ],
+  "10-31": [
+    {
+      "src": "assets/photos/10-31/01.jpg",
+      "thumb": "assets/thumbs/10-31/01.jpg",
+      "w": 1440,
+      "h": 1078
+    },
+    {
+      "src": "assets/photos/10-31/02.jpg",
+      "thumb": "assets/thumbs/10-31/02.jpg",
+      "w": 1067,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/10-31/03.jpg",
+      "thumb": "assets/thumbs/10-31/03.jpg",
+      "w": 1067,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/10-31/04.jpg",
+      "thumb": "assets/thumbs/10-31/04.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/10-31/05.jpg",
+      "thumb": "assets/thumbs/10-31/05.jpg",
+      "w": 1440,
+      "h": 1078
+    },
+    {
+      "src": "assets/photos/10-31/06.jpg",
+      "thumb": "assets/thumbs/10-31/06.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/10-31/07.jpg",
+      "thumb": "assets/thumbs/10-31/07.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/10-31/08.jpg",
+      "thumb": "assets/thumbs/10-31/08.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/10-31/09.jpg",
+      "thumb": "assets/thumbs/10-31/09.jpg",
+      "w": 1204,
+      "h": 1600
+    }
+  ],
+  "10-31-vid": [
+    {
+      "src": "assets/photos/10-31-vid/still.jpg",
+      "thumb": "assets/thumbs/10-31-vid/still.jpg",
+      "w": 1013,
+      "h": 569,
+      "isVideoStill": true
+    }
+  ],
+  "11-01": [
+    {
+      "src": "assets/photos/11-01/01.jpg",
+      "thumb": "assets/thumbs/11-01/01.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-01/02.jpg",
+      "thumb": "assets/thumbs/11-01/02.jpg",
+      "w": 1440,
+      "h": 1084
+    },
+    {
+      "src": "assets/photos/11-01/03.jpg",
+      "thumb": "assets/thumbs/11-01/03.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-01/04.jpg",
+      "thumb": "assets/thumbs/11-01/04.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-01/05.jpg",
+      "thumb": "assets/thumbs/11-01/05.jpg",
+      "w": 1199,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-01/06.jpg",
+      "thumb": "assets/thumbs/11-01/06.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-01/07.jpg",
+      "thumb": "assets/thumbs/11-01/07.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-01/08.jpg",
+      "thumb": "assets/thumbs/11-01/08.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-01/09.jpg",
+      "thumb": "assets/thumbs/11-01/09.jpg",
+      "w": 1440,
+      "h": 1080
+    }
+  ],
+  "11-02-vid": [
+    {
+      "src": "assets/photos/11-02-vid/still.jpg",
+      "thumb": "assets/thumbs/11-02-vid/still.jpg",
+      "w": 1125,
+      "h": 1529,
+      "isVideoStill": true
+    }
+  ],
+  "11-03": [
+    {
+      "src": "assets/photos/11-03/01.jpg",
+      "thumb": "assets/thumbs/11-03/01.jpg",
+      "w": 1440,
+      "h": 1084
+    },
+    {
+      "src": "assets/photos/11-03/02.jpg",
+      "thumb": "assets/thumbs/11-03/02.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-03/03.jpg",
+      "thumb": "assets/thumbs/11-03/03.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-03/04.jpg",
+      "thumb": "assets/thumbs/11-03/04.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-03/05.jpg",
+      "thumb": "assets/thumbs/11-03/05.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-03/06.jpg",
+      "thumb": "assets/thumbs/11-03/06.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-03/07.jpg",
+      "thumb": "assets/thumbs/11-03/07.jpg",
+      "w": 1440,
+      "h": 1084
+    },
+    {
+      "src": "assets/photos/11-03/08.jpg",
+      "thumb": "assets/thumbs/11-03/08.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-03/09.jpg",
+      "thumb": "assets/thumbs/11-03/09.jpg",
+      "w": 1440,
+      "h": 1080
+    }
+  ],
+  "11-04": [
+    {
+      "src": "assets/photos/11-04/01.jpg",
+      "thumb": "assets/thumbs/11-04/01.jpg",
+      "w": 1440,
+      "h": 960
+    },
+    {
+      "src": "assets/photos/11-04/02.jpg",
+      "thumb": "assets/thumbs/11-04/02.jpg",
+      "w": 1067,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-04/03.jpg",
+      "thumb": "assets/thumbs/11-04/03.jpg",
+      "w": 1204,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-04/04.jpg",
+      "thumb": "assets/thumbs/11-04/04.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-04/05.jpg",
+      "thumb": "assets/thumbs/11-04/05.jpg",
+      "w": 1204,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-04/06.jpg",
+      "thumb": "assets/thumbs/11-04/06.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-04/07.jpg",
+      "thumb": "assets/thumbs/11-04/07.jpg",
+      "w": 1440,
+      "h": 1005
+    },
+    {
+      "src": "assets/photos/11-04/08.jpg",
+      "thumb": "assets/thumbs/11-04/08.jpg",
+      "w": 1282,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-04/09.jpg",
+      "thumb": "assets/thumbs/11-04/09.jpg",
+      "w": 1440,
+      "h": 1008
+    }
+  ],
+  "11-04-vid": [
+    {
+      "src": "assets/photos/11-04-vid/still.jpg",
+      "thumb": "assets/thumbs/11-04-vid/still.jpg",
+      "w": 957,
+      "h": 1600,
+      "isVideoStill": true
+    }
+  ],
+  "11-05-kd": [
+    {
+      "src": "assets/photos/11-05-kd/still.jpg",
+      "thumb": "assets/thumbs/11-05-kd/still.jpg",
+      "w": 957,
+      "h": 1600,
+      "isVideoStill": true
+    }
+  ],
+  "11-05-ld": [
+    {
+      "src": "assets/photos/11-05-ld/still.jpg",
+      "thumb": "assets/thumbs/11-05-ld/still.jpg",
+      "w": 1013,
+      "h": 757,
+      "isVideoStill": true
+    }
+  ],
+  "11-06": [
+    {
+      "src": "assets/photos/11-06/01.jpg",
+      "thumb": "assets/thumbs/11-06/01.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-06/02.jpg",
+      "thumb": "assets/thumbs/11-06/02.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-06/03.jpg",
+      "thumb": "assets/thumbs/11-06/03.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-06/04.jpg",
+      "thumb": "assets/thumbs/11-06/04.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-06/05.jpg",
+      "thumb": "assets/thumbs/11-06/05.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-06/06.jpg",
+      "thumb": "assets/thumbs/11-06/06.jpg",
+      "w": 1204,
+      "h": 1600
+    }
+  ],
+  "11-06-vid": [
+    {
+      "src": "assets/photos/11-06-vid/still.jpg",
+      "thumb": "assets/thumbs/11-06-vid/still.jpg",
+      "w": 1013,
+      "h": 1353,
+      "isVideoStill": true
+    }
+  ],
+  "11-07-dx": [
+    {
+      "src": "assets/photos/11-07-dx/still.jpg",
+      "thumb": "assets/thumbs/11-07-dx/still.jpg",
+      "w": 957,
+      "h": 1600,
+      "isVideoStill": true
+    }
+  ],
+  "11-07-tq": [
+    {
+      "src": "assets/photos/11-07-tq/still.jpg",
+      "thumb": "assets/thumbs/11-07-tq/still.jpg",
+      "w": 957,
+      "h": 1600,
+      "isVideoStill": true
+    }
+  ],
+  "11-08": [
+    {
+      "src": "assets/photos/11-08/01.jpg",
+      "thumb": "assets/thumbs/11-08/01.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-08/02.jpg",
+      "thumb": "assets/thumbs/11-08/02.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-08/03.jpg",
+      "thumb": "assets/thumbs/11-08/03.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-08/04.jpg",
+      "thumb": "assets/thumbs/11-08/04.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-08/05.jpg",
+      "thumb": "assets/thumbs/11-08/05.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-08/06.jpg",
+      "thumb": "assets/thumbs/11-08/06.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-08/07.jpg",
+      "thumb": "assets/thumbs/11-08/07.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-08/08.jpg",
+      "thumb": "assets/thumbs/11-08/08.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-08/09.jpg",
+      "thumb": "assets/thumbs/11-08/09.jpg",
+      "w": 1200,
+      "h": 1600
+    }
+  ],
+  "11-08-wq": [
+    {
+      "src": "assets/photos/11-08-wq/still.jpg",
+      "thumb": "assets/thumbs/11-08-wq/still.jpg",
+      "w": 957,
+      "h": 1600,
+      "isVideoStill": true
+    }
+  ],
+  "11-09-jc": [
+    {
+      "src": "assets/photos/11-09-jc/01.jpg",
+      "thumb": "assets/thumbs/11-09-jc/01.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-09-jc/02.jpg",
+      "thumb": "assets/thumbs/11-09-jc/02.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-09-jc/03.jpg",
+      "thumb": "assets/thumbs/11-09-jc/03.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-09-jc/04.jpg",
+      "thumb": "assets/thumbs/11-09-jc/04.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-09-jc/05.jpg",
+      "thumb": "assets/thumbs/11-09-jc/05.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-09-jc/06.jpg",
+      "thumb": "assets/thumbs/11-09-jc/06.jpg",
+      "w": 1440,
+      "h": 1080
+    }
+  ],
+  "11-09-qh": [
+    {
+      "src": "assets/photos/11-09-qh/01.jpg",
+      "thumb": "assets/thumbs/11-09-qh/01.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-09-qh/02.jpg",
+      "thumb": "assets/thumbs/11-09-qh/02.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-09-qh/03.jpg",
+      "thumb": "assets/thumbs/11-09-qh/03.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-09-qh/04.jpg",
+      "thumb": "assets/thumbs/11-09-qh/04.jpg",
+      "w": 1271,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-09-qh/05.jpg",
+      "thumb": "assets/thumbs/11-09-qh/05.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-09-qh/06.jpg",
+      "thumb": "assets/thumbs/11-09-qh/06.jpg",
+      "w": 1200,
+      "h": 1600
+    },
+    {
+      "src": "assets/photos/11-09-qh/07.jpg",
+      "thumb": "assets/thumbs/11-09-qh/07.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-09-qh/08.jpg",
+      "thumb": "assets/thumbs/11-09-qh/08.jpg",
+      "w": 1440,
+      "h": 1080
+    },
+    {
+      "src": "assets/photos/11-09-qh/09.jpg",
+      "thumb": "assets/thumbs/11-09-qh/09.jpg",
+      "w": 1200,
+      "h": 1600
+    }
+  ],
+  "cover": [
+    {
+      "src": "assets/photos/cover/milk-lake.jpg",
+      "w": 1092,
+      "h": 457
+    }
+  ]
+}
