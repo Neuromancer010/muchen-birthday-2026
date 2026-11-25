@@ -15,7 +15,9 @@
   const activeReels = [];
   const activeHandscrolls = [];
   const activeDecks = [];
+  const activeVideos = [];
   const allPhotosFlat = [];
+  let unmutedVideoCtrl = null;
 
   // ------------------------------------------------------------------------
   // 1. 英雄片头轮播 + 牛奶海尾声背景
@@ -228,6 +230,19 @@
     let autoSwitch = true;
     let toastTimer = null;
     const TARGET_VOL = 0.72;
+    const DUCKED_VOL = 0.06;
+    let isDucked = false;
+
+    function getTargetVol() {
+      return isDucked ? DUCKED_VOL : TARGET_VOL;
+    }
+
+    function duck(enable) {
+      if (isDucked === enable) return;
+      isDucked = enable;
+      if (!isPlaying) return;
+      fadeVolume(activeDeck, activeDeck.volume, getTargetVol(), enable ? 420 : 750);
+    }
 
     function applyTrackRhythm(track) {
       currentSlideMs = track.slideMs || 3400;
@@ -295,7 +310,7 @@
           unlocked = true;
           isPlaying = true;
           updateUI();
-          fadeVolume(activeDeck, 0.02, TARGET_VOL, 1200);
+          fadeVolume(activeDeck, 0.02, getTargetVol(), 1200);
           if (!silentToast) showToast(`♫ ${tr.shortTitle}`);
         }).catch(() => { isPlaying = false; updateUI(); });
       }
@@ -331,8 +346,8 @@
           unlocked = true;
           isPlaying = true;
           updateUI();
-          fadeVolume(nextDeck, 0.01, TARGET_VOL, 1350);
-          fadeVolume(oldDeck, oldDeck.volume || TARGET_VOL, 0, 1150, () => oldDeck.pause());
+          fadeVolume(nextDeck, 0.01, getTargetVol(), 1350);
+          fadeVolume(oldDeck, oldDeck.volume || getTargetVol(), 0, 1150, () => oldDeck.pause());
           showToast(toastMsg || `♫ ${tr.shortTitle}`);
         }).catch(() => { isPlaying = false; updateUI(); });
       }
@@ -378,6 +393,7 @@
           selectTrack(targetIdx, false);
         }
       },
+      duck,
       showToast
     };
   })();
@@ -497,9 +513,10 @@
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
 
       const ch = DATA.chapters.find((c) => c.id === id);
-      const dwell = ch && ch.presentation === "intertitle" ? 5400
-        : id === "route" ? 4200
+      const hasMultiMedia = ch && ch.entries.length > 1;
+      const dwell = id === "route" ? 4200
         : id === "birthday" ? 6600
+        : hasMultiMedia ? 13000
         : 10500;
       autoTimer = setTimeout(advanceFilm, dwell);
     }
@@ -1076,6 +1093,249 @@
     return wrap;
   }
 
+  function formatDur(sec) {
+    const s = Math.max(0, Math.round(Number(sec) || 0));
+    const m = Math.floor(s / 60);
+    const r = s % 60;
+    return `${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
+  }
+
+  function createCinemaVideo(ch, entry, reverse) {
+    const vid = entry.video;
+    const enterCut = ch.enterCut || "curtain";
+
+    const wrap = document.createElement("div");
+    wrap.className = "cinema-layout" + (reverse ? " reverse" : "");
+
+    const stageCol = document.createElement("div");
+    stageCol.className = `cinema-stage-col cut-reveal cut-${enterCut}`;
+
+    const shell = document.createElement("div");
+    shell.className = "video-stage-shell";
+
+    // 环境融图光晕
+    const aura = document.createElement("div");
+    aura.className = "stage-aura";
+    aura.style.backgroundImage = `url("${vid.poster}")`;
+    shell.appendChild(aura);
+
+    const frame = document.createElement("div");
+    frame.className = `video-frame orient-${vid.orient} paused`;
+
+    if (vid.orient === "P") {
+      const bg = document.createElement("img");
+      bg.className = "video-bg-blur";
+      bg.src = vid.poster;
+      bg.alt = "";
+      bg.loading = "lazy";
+      frame.appendChild(bg);
+    }
+
+    const videoEl = document.createElement("video");
+    videoEl.className = "cinema-video-el";
+    videoEl.src = vid.src;
+    videoEl.poster = vid.poster;
+    videoEl.muted = true;
+    videoEl.defaultMuted = true;
+    videoEl.loop = true;
+    videoEl.playsInline = true;
+    videoEl.preload = "metadata";
+    videoEl.setAttribute("playsinline", "");
+    videoEl.setAttribute("webkit-playsinline", "");
+    videoEl.setAttribute("x5-playsinline", "");
+    videoEl.setAttribute("x5-video-player-type", "h5");
+    frame.appendChild(videoEl);
+
+    const vignette = document.createElement("div");
+    vignette.className = "reel-vignette-blend";
+    frame.appendChild(vignette);
+
+    const totalStr = formatDur(vid.duration);
+    const badge = document.createElement("div");
+    badge.className = "video-top-badge";
+    badge.innerHTML = `<span class="video-live-dot"></span><span class="video-time-txt">实拍影像 · ${totalStr}</span>`;
+    const timeTxt = badge.querySelector(".video-time-txt");
+    frame.appendChild(badge);
+
+    const centerPlay = document.createElement("div");
+    centerPlay.className = "video-center-play";
+    centerPlay.setAttribute("aria-hidden", "true");
+    centerPlay.textContent = "▶";
+    frame.appendChild(centerPlay);
+
+    const hud = document.createElement("div");
+    hud.className = "video-hud";
+
+    const hudRow = document.createElement("div");
+    hudRow.className = "video-hud-row";
+    const shotLabel = document.createElement("span");
+    shotLabel.className = "video-shot-label";
+    shotLabel.textContent = vid.label || ch.location;
+
+    const ctrls = document.createElement("div");
+    ctrls.className = "video-controls";
+
+    const btnPlay = mkBtn("reel-btn", "▶", "播放或暂停视频");
+    const btnSound = document.createElement("button");
+    btnSound.type = "button";
+    btnSound.className = "video-sound-btn";
+    btnSound.setAttribute("aria-label", "开启或关闭视频原声");
+    btnSound.textContent = "🔇 开启原声";
+
+    const btnFs = mkBtn("reel-btn", "⤢", "全屏播放视频");
+    ctrls.append(btnPlay, btnSound, btnFs);
+    hudRow.append(shotLabel, ctrls);
+
+    const scrub = document.createElement("div");
+    scrub.className = "video-scrub";
+    scrub.innerHTML = `<div class="video-scrub-track"><div class="video-scrub-fill"></div></div>`;
+    const scrubFill = scrub.querySelector(".video-scrub-fill");
+
+    hud.append(hudRow, scrub);
+    frame.appendChild(hud);
+    shell.appendChild(frame);
+    stageCol.appendChild(shell);
+
+    const storyCol = document.createElement("div");
+    storyCol.className = "cinema-story-col cut-reveal cut-blur-zoom";
+    const hasClock = entry.time && entry.time.includes(":");
+    const metaTime = hasClock ? `${ch.date} ${entry.time}` : ch.date;
+    storyCol.innerHTML = `
+      ${entry.subTitle ? `<div class="story-sublabel">${entry.subTitle}</div>` : ""}
+      <p class="mom-quote">${escapeHtml(entry.caption)}</p>
+      <div class="mom-quote-meta">${metaTime} · 动态影像 ${totalStr}</div>
+    `;
+
+    // 保留 10.30 土拨鼠投喂雪饼互动彩蛋
+    if (ch.special === "marmot-cracker") {
+      let count = 0;
+      const actionBox = document.createElement("div");
+      actionBox.className = "story-extra-action";
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn-cracker";
+      btn.id = "btnFeedCracker";
+      btn.textContent = "🍘 投喂雪饼";
+      btn.addEventListener("click", (e) => {
+        count++;
+        const r = e.currentTarget.getBoundingClientRect();
+        for (let k = 0; k < 3; k++) {
+          const el = document.createElement("span");
+          el.className = "flying-cracker";
+          el.textContent = k === 1 ? "✨" : "🍘";
+          el.style.left = `${r.left + r.width / 2}px`;
+          el.style.top = `${r.top}px`;
+          el.style.setProperty("--dx", `${(Math.random() - 0.5) * 200}px`);
+          el.style.setProperty("--dy", `${-110 - Math.random() * 120}px`);
+          document.body.appendChild(el);
+          setTimeout(() => el.remove(), 950);
+        }
+        btn.textContent = count === 1 ? "🍘 已给 1 片 · 停手了" : `🍘 已给 ${count} 片雪饼`;
+      });
+      actionBox.appendChild(btn);
+      storyCol.appendChild(actionBox);
+    }
+
+    wrap.append(stageCol, storyCol);
+
+    let userPaused = false;
+    let visible = false;
+
+    function syncPlayState() {
+      const playing = !videoEl.paused && !videoEl.ended;
+      frame.classList.toggle("paused", !playing);
+      btnPlay.textContent = playing ? "❚❚" : "▶";
+    }
+
+    function setMutedState(muted, silentToast = false) {
+      videoEl.muted = muted;
+      btnSound.classList.toggle("unmuted", !muted);
+      btnSound.textContent = muted ? "🔇 开启原声" : "🔊 原声中";
+      if (!muted) {
+        if (unmutedVideoCtrl && unmutedVideoCtrl !== ctrl) {
+          unmutedVideoCtrl.muteSilently();
+        }
+        unmutedVideoCtrl = ctrl;
+        MusicEngine.duck(true);
+        CinemaHUD.stopAutoFilm(true);
+        if (videoEl.paused) {
+          userPaused = false;
+          videoEl.play().catch(() => {});
+        }
+        if (!silentToast) MusicEngine.showToast("已开启视频原声 · 配乐已自动轻柔淡出");
+      } else {
+        if (unmutedVideoCtrl === ctrl) {
+          unmutedVideoCtrl = null;
+          MusicEngine.duck(false);
+        }
+        if (!silentToast) MusicEngine.showToast("已切回相册配乐");
+      }
+    }
+
+    const ctrl = {
+      el: frame,
+      muteSilently() { setMutedState(true, true); },
+      setVisible(v) {
+        visible = v;
+        if (v) {
+          if (!userPaused) {
+            const p = videoEl.play();
+            if (p && typeof p.catch === "function") p.catch(() => syncPlayState());
+          }
+        } else {
+          if (!videoEl.muted) setMutedState(true, true);
+          videoEl.pause();
+          syncPlayState();
+        }
+      }
+    };
+
+    function togglePlay() {
+      if (videoEl.paused) {
+        userPaused = false;
+        videoEl.play().then(syncPlayState).catch(syncPlayState);
+      } else {
+        userPaused = true;
+        videoEl.pause();
+        syncPlayState();
+      }
+    }
+
+    videoEl.addEventListener("play", syncPlayState);
+    videoEl.addEventListener("pause", syncPlayState);
+    videoEl.addEventListener("timeupdate", () => {
+      const dur = videoEl.duration || vid.duration || 1;
+      const pct = Math.min(100, (videoEl.currentTime / dur) * 100);
+      scrubFill.style.width = `${pct}%`;
+      timeTxt.textContent = `实拍影像 · ${formatDur(videoEl.currentTime)} / ${formatDur(dur)}`;
+    });
+
+    frame.addEventListener("click", (e) => {
+      if (e.target.closest(".video-hud")) return;
+      togglePlay();
+    });
+    btnPlay.addEventListener("click", (e) => { e.stopPropagation(); togglePlay(); });
+    btnSound.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setMutedState(!videoEl.muted, false);
+    });
+    btnFs.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (videoEl.requestFullscreen) videoEl.requestFullscreen().catch(() => {});
+      else if (videoEl.webkitEnterFullscreen) videoEl.webkitEnterFullscreen();
+    });
+    scrub.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const rect = scrub.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      const dur = videoEl.duration || vid.duration || 0;
+      if (dur > 0) videoEl.currentTime = dur * ratio;
+    });
+
+    activeVideos.push(ctrl);
+    return wrap;
+  }
+
   function createSpotlight(ch, entry) {
     const photos = registerPhotos(ch, entry);
     const ph = photos[0];
@@ -1187,7 +1447,7 @@
         });
         container.appendChild(grid);
       } else {
-        let reelCount = 0;
+        let stageCount = 0;
         ch.entries.forEach((en) => {
           if (en.mode === "note") {
             const note = document.createElement("article");
@@ -1197,16 +1457,32 @@
               <div class="mom-quote-meta">${ch.date} ${en.time || ""}</div>
             `;
             container.appendChild(note);
+          } else if (en.mode === "video") {
+            const reverse = ch.presentation === "reel-reverse"
+              ? (stageCount % 2 === 0)
+              : (stageCount % 2 === 1);
+            const node = createCinemaVideo(ch, en, reverse);
+            if (stageCount > 0) node.classList.add("dual-reel-gap");
+            stageCount++;
+            container.appendChild(node);
           } else if (en.mode === "reel") {
-            const reverse = ch.presentation === "reel-reverse" || reelCount % 2 === 1;
+            const reverse = ch.presentation === "reel-reverse"
+              ? (stageCount % 2 === 0)
+              : (stageCount % 2 === 1);
             const node = createCinemaReel(ch, en, reverse);
-            if (reelCount > 0) node.classList.add("dual-reel-gap");
-            reelCount++;
+            if (stageCount > 0) node.classList.add("dual-reel-gap");
+            stageCount++;
             container.appendChild(node);
           } else if (en.mode === "handscroll") {
-            container.appendChild(createHandscroll(ch, en));
+            const node = createHandscroll(ch, en);
+            if (stageCount > 0) node.classList.add("dual-reel-gap");
+            stageCount++;
+            container.appendChild(node);
           } else if (en.mode === "deck") {
-            container.appendChild(createCardDeck(ch, en));
+            const node = createCardDeck(ch, en);
+            if (stageCount > 0) node.classList.add("dual-reel-gap");
+            stageCount++;
+            container.appendChild(node);
           } else if (en.mode === "spotlight") {
             container.appendChild(createSpotlight(ch, en));
           }
@@ -1315,12 +1591,15 @@
         if (h) h.visible = en.isIntersecting;
         const d = activeDecks.find((x) => x.el === en.target);
         if (d) d.setVisible(en.isIntersecting);
+        const v = activeVideos.find((x) => x.el === en.target);
+        if (v) v.setVisible(en.isIntersecting);
       });
     }, { threshold: 0.25 });
 
     activeReels.forEach((r) => mediaObs.observe(r.el));
     activeHandscrolls.forEach((h) => mediaObs.observe(h.viewport));
     activeDecks.forEach((d) => mediaObs.observe(d.el));
+    activeVideos.forEach((v) => mediaObs.observe(v.el));
 
     const routeNodes = $$(".route-node");
     const chapterMap = Object.fromEntries(DATA.chapters.map((c) => [c.id, c]));
@@ -1344,7 +1623,7 @@
           routeNodes.forEach((n) => n.classList.toggle("active", n.dataset.target === id));
         }
       });
-    }, { threshold: 0.22, rootMargin: "-14% 0px -46% 0px" });
+    }, { threshold: 0.03, rootMargin: "-24% 0px -56% 0px" });
 
     sections.forEach((s) => secObs.observe(s));
 

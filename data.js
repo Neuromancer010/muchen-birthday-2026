@@ -122,17 +122,21 @@ window.SITE_DATA = {
       bgColor: "#1D1E19",
       surfaceTint: "rgba(182, 158, 96, 0.14)",
       accent: "#CFA95A",
-      presentation: "spotlight",
+      presentation: "video",
       enterCut: "iris",
       special: "marmot-cracker",
       entries: [
         {
           caption: "别打了，雪饼我给",
           time: "12:26",
-          mode: "spotlight",
-          photos: [
-            { src: "assets/photos/10-30-vid/still.jpg", thumb: "assets/thumbs/10-30-vid/still.jpg", orient: "L", alt: "石峰前两只土拨鼠认真摔跤" }
-          ]
+          mode: "video",
+          video: {
+            src: "assets/videos/10-30-vid.mp4",
+            poster: "assets/videos/10-30-vid-poster.jpg",
+            orient: "L",
+            duration: 13.1,
+            label: "石峰前两只土拨鼠认真摔跤"
+          }
         }
       ]
     },
@@ -154,7 +158,15 @@ window.SITE_DATA = {
         {
           caption: "世界这本书，我又翻了一页\n有些地方，要走很远才到达\n稻城亚丁⛰️ 7:00出发，20:00到达，辛苦是真的，但到了才知道，那些路都值得\n十月末的稻城，雪山白得发亮，草甸黄得温柔，海子蓝得仿佛刺破了天空\n这就是秋天的童话",
           time: "00:15",
-          mode: "note"
+          mode: "video",
+          subTitle: "稻城亚丁 · 秋天童话",
+          video: {
+            src: "assets/videos/10-31-vid.mp4",
+            poster: "assets/videos/10-31-vid-poster.jpg",
+            orient: "P",
+            duration: 142.7,
+            label: "稻城亚丁雪山草甸与海子影像"
+          }
         },
         {
           caption: "挑战的是海拔，更是自己，零吸氧登顶👍",
@@ -218,13 +230,20 @@ window.SITE_DATA = {
       bgColor: "#201B14",
       surfaceTint: "rgba(206, 158, 86, 0.14)",
       accent: "#DBA95A",
-      presentation: "intertitle",
+      presentation: "video",
       enterCut: "blur-zoom",
       entries: [
         {
           caption: "来姑弄村，浪费一个下午",
           time: "17:13",
-          mode: "intertitle"
+          mode: "video",
+          video: {
+            src: "assets/videos/11-02-vid.mp4",
+            poster: "assets/videos/11-02-vid-poster.jpg",
+            orient: "P",
+            duration: 60.1,
+            label: "姑弄村雪山与午后慢时光"
+          }
         }
       ]
     },
@@ -278,7 +297,15 @@ window.SITE_DATA = {
         {
           caption: "爬上东山顶，看长青春科尔寺静立，看千户藏寨藏着人间烟火，来仁康古街追寻旧时光，风中有酥油的香气，耳边有缓缓转动的经筒声，这就是世界高城 -- 理塘",
           time: "10:11",
-          mode: "note"
+          mode: "video",
+          subTitle: "世界高城 · 理塘",
+          video: {
+            src: "assets/videos/11-04-vid.mp4",
+            poster: "assets/videos/11-04-vid-poster.jpg",
+            orient: "P",
+            duration: 64.1,
+            label: "理塘东山顶、藏寨与转经筒"
+          }
         },
         {
           caption: "不爱城市霓虹喧嚣，也不恋远方异国。心之所向唯有高原旷野，这里氧气稀薄，信仰却足够厚重。当双脚抵达，心底那股感动，难以言喻。前路尚有无数山河未曾相逢，慢慢走，此生一一抵达。\n2026年秋于雅（亚）拉雪山",
@@ -310,20 +337,34 @@ window.SITE_DATA = {
       bgColor: "#211815",
       surfaceTint: "rgba(196, 98, 72, 0.15)",
       accent: "#DF7F62",
-      presentation: "intertitle",
+      presentation: "video",
       enterCut: "wipe-right",
       entries: [
         {
           caption: "折多河穿城奔流，群山环抱着情歌故里，康定到此一遇，体会那句跑马溜溜的浪漫",
           time: "11:54",
-          mode: "intertitle",
-          placeTag: "康定"
+          mode: "video",
+          subTitle: "情歌故里 · 康定",
+          video: {
+            src: "assets/videos/11-05-kd.mp4",
+            poster: "assets/videos/11-05-kd-poster.jpg",
+            orient: "P",
+            duration: 27.7,
+            label: "折多河与康定城风光"
+          }
         },
         {
           caption: "终于来到课本里的泸定桥啦\n踏泸定铁索，风摇桥晃，铁索凌空，心中肃然，手更不敢松，生怕手机奔赴大渡河",
           time: "16:53",
-          mode: "intertitle",
-          placeTag: "泸定桥"
+          mode: "video",
+          subTitle: "大渡河畔 · 泸定桥",
+          video: {
+            src: "assets/videos/11-05-ld.mp4",
+            poster: "assets/videos/11-05-ld-poster.jpg",
+            orient: "P",
+            duration: 36.3,
+            label: "踏过铁索凌空的泸定桥"
+          }
         }
       ]
     },
@@ -344,7 +385,15 @@ window.SITE_DATA = {
         {
           caption: "答案在路上，自由在风里\n一路高歌一路嗨",
           time: "09:57",
-          mode: "note"
+          mode: "video",
+          subTitle: "行在路上 · 一路高歌",
+          video: {
+            src: "assets/videos/11-06-vid.mp4",
+            poster: "assets/videos/11-06-vid-poster.jpg",
+            orient: "P",
+            duration: 127.8,
+            label: "一路欢歌与沿途烟火"
+          }
         },
         {
           caption: "来成都老茶馆，点一盏好茶、得半日清闲，听旁人摆龙门阵，看台上脸谱变换，慢慢悠悠，任时光慢慢流走",
@@ -372,20 +421,34 @@ window.SITE_DATA = {
       bgColor: "#0F1E24",
       surfaceTint: "rgba(56, 152, 168, 0.18)",
       accent: "#53B5C5",
-      presentation: "intertitle",
+      presentation: "video",
       enterCut: "iris",
       entries: [
         {
           caption: "世上溶洞万千，但却相似，看多了被五颜六色彩灯过度渲染的溶洞，来到兴文天泉洞，才看见喀斯特原本的模样，这里钟乳林立，暗河行舟，天光泻入，是大地本身的震撼",
           time: "10:10",
-          mode: "intertitle",
-          placeTag: "天泉洞"
+          mode: "video",
+          subTitle: "喀斯特秘境 · 天泉洞",
+          video: {
+            src: "assets/videos/11-07-tq.mp4",
+            poster: "assets/videos/11-07-tq-poster.jpg",
+            orient: "P",
+            duration: 75.9,
+            label: "暗河行舟与天光泻入的天泉洞"
+          }
         },
         {
           caption: "穿越地心世界",
           time: "14:12",
-          mode: "intertitle",
-          placeTag: "地心通道"
+          mode: "video",
+          subTitle: "地心通道",
+          video: {
+            src: "assets/videos/11-07-dx.mp4",
+            poster: "assets/videos/11-07-dx-poster.jpg",
+            orient: "P",
+            duration: 27.3,
+            label: "深入地下溶洞扶梯穿越"
+          }
         }
       ]
     },
@@ -406,7 +469,15 @@ window.SITE_DATA = {
         {
           caption: "藏在大凉山峡谷的秘境，螺髻九十九里温泉瀑布，今日特意来体验了一下，谁懂啊，居然换来了一人包池的快乐，浸在热泉里听瀑布，这才是旅行该有的松弛吧\n至于网上差评的卫生间和更衣室，现在已大大改观，新卫生间在最后一张图片哦",
           time: "12:17",
-          mode: "note"
+          mode: "video",
+          subTitle: "螺髻九十九里 · 温泉瀑布",
+          video: {
+            src: "assets/videos/11-08-wq.mp4",
+            poster: "assets/videos/11-08-wq-poster.jpg",
+            orient: "P",
+            duration: 135.1,
+            label: "一人包池的峡谷温泉瀑布"
+          }
         },
         {
           caption: "六百年的古村落，藏着彝乡温柔\n橙墙树影，古巷人家\n借一身彝装，与旧时光相遇\n找一处小小的院落，打卡特色一鱼三吃，三重快乐，鲜到上头",
