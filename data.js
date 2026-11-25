@@ -3,7 +3,6 @@
 
 window.SITE_DATA = {
   momName: "老妈",
-  wechatName: "沐辰",
   signature: "借时光之手，暖一束花开",
   birthdayDate: "2026.11.25",
   tripRange: "2026.10.29 — 11.09",
