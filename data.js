@@ -22,16 +22,16 @@ window.SITE_DATA = {
       src: "assets/audio/chengdu.mp3"
     },
     {
-      id: "sunset",
-      title: "SUNSET IN THE LAKE",
-      shortTitle: "SUNSET IN THE LAKE",
+      id: "fuguang",
+      title: "浮光",
+      shortTitle: "浮光",
       chapterRange: "康定 · 成都 · 兴文 · 西昌与尾声",
-      bpm: 118,
-      beatSec: 0.508,
+      bpm: 112,
+      beatSec: 0.536,
       slideMs: 3400,
-      durationSec: 418,
+      durationSec: 258,
       motionMood: "luminous",
-      src: "assets/audio/sunset-in-the-lake.mp3"
+      src: "assets/audio/fuguang.mp3"
     }
   ],
 
@@ -138,6 +138,8 @@ window.SITE_DATA = {
             src: "assets/videos/10-30-vid.mp4",
             poster: "assets/videos/10-30-vid-poster.jpg",
             orient: "L",
+            w: 960,
+            h: 672,
             duration: 13.1,
             label: "石峰前两只土拨鼠认真摔跤"
           }
@@ -157,6 +159,7 @@ window.SITE_DATA = {
       accent: "#54C0D4",
       atmosphere: "snow",
       badge: "4,600m · 零吸氧登顶",
+      special: "yading-cheer",
       presentation: "reel-reverse",
       enterCut: "wipe-diag",
       entries: [
@@ -169,8 +172,10 @@ window.SITE_DATA = {
             src: "assets/videos/10-31-vid.mp4",
             poster: "assets/videos/10-31-vid-poster.jpg",
             orient: "P",
+            w: 540,
+            h: 960,
             duration: 142.7,
-            label: "稻城亚丁雪山草甸与海子影像"
+            label: "稻城亚丁雪山草甸与海子"
           }
         },
         {
@@ -248,6 +253,8 @@ window.SITE_DATA = {
             src: "assets/videos/11-02-vid.mp4",
             poster: "assets/videos/11-02-vid-poster.jpg",
             orient: "P",
+            w: 720,
+            h: 960,
             duration: 60.1,
             label: "姑弄村雪山与午后慢时光"
           }
@@ -300,6 +307,7 @@ window.SITE_DATA = {
       surfaceTint: "rgba(218, 102, 66, 0.18)",
       accent: "#E87A54",
       atmosphere: "autumn",
+      special: "wind-horse",
       presentation: "reel-reverse",
       enterCut: "curtain",
       entries: [
@@ -312,6 +320,8 @@ window.SITE_DATA = {
             src: "assets/videos/11-04-vid.mp4",
             poster: "assets/videos/11-04-vid-poster.jpg",
             orient: "P",
+            w: 540,
+            h: 960,
             duration: 64.1,
             label: "理塘东山顶、藏寨与转经筒"
           }
@@ -359,6 +369,8 @@ window.SITE_DATA = {
             src: "assets/videos/11-05-kd.mp4",
             poster: "assets/videos/11-05-kd-poster.jpg",
             orient: "P",
+            w: 540,
+            h: 960,
             duration: 27.7,
             label: "折多河与康定城风光"
           }
@@ -372,6 +384,8 @@ window.SITE_DATA = {
             src: "assets/videos/11-05-ld.mp4",
             poster: "assets/videos/11-05-ld-poster.jpg",
             orient: "P",
+            w: 540,
+            h: 960,
             duration: 36.3,
             label: "踏过铁索凌空的泸定桥"
           }
@@ -390,6 +404,7 @@ window.SITE_DATA = {
       surfaceTint: "rgba(202, 74, 62, 0.18)",
       accent: "#E3685B",
       atmosphere: "lantern",
+      special: "pour-tea",
       presentation: "deck",
       enterCut: "blur-zoom",
       entries: [
@@ -402,6 +417,8 @@ window.SITE_DATA = {
             src: "assets/videos/11-06-vid.mp4",
             poster: "assets/videos/11-06-vid-poster.jpg",
             orient: "P",
+            w: 540,
+            h: 960,
             duration: 127.8,
             label: "一路欢歌与沿途烟火"
           }
@@ -445,6 +462,8 @@ window.SITE_DATA = {
             src: "assets/videos/11-07-tq.mp4",
             poster: "assets/videos/11-07-tq-poster.jpg",
             orient: "P",
+            w: 540,
+            h: 960,
             duration: 75.9,
             label: "暗河行舟与天光泻入的天泉洞"
           }
@@ -458,6 +477,8 @@ window.SITE_DATA = {
             src: "assets/videos/11-07-dx.mp4",
             poster: "assets/videos/11-07-dx-poster.jpg",
             orient: "P",
+            w: 540,
+            h: 960,
             duration: 27.3,
             label: "深入地下溶洞扶梯穿越"
           }
@@ -476,6 +497,7 @@ window.SITE_DATA = {
       surfaceTint: "rgba(224, 114, 52, 0.18)",
       accent: "#EE8A49",
       atmosphere: "water",
+      special: "waterfall-sound",
       presentation: "handscroll",
       enterCut: "wipe-right",
       entries: [
@@ -488,6 +510,8 @@ window.SITE_DATA = {
             src: "assets/videos/11-08-wq.mp4",
             poster: "assets/videos/11-08-wq-poster.jpg",
             orient: "P",
+            w: 540,
+            h: 960,
             duration: 135.1,
             label: "一人包池的峡谷温泉瀑布"
           }
@@ -522,6 +546,7 @@ window.SITE_DATA = {
       surfaceTint: "rgba(232, 166, 68, 0.18)",
       accent: "#F0B654",
       atmosphere: "lantern",
+      special: "wish-rocket",
       presentation: "reel",
       enterCut: "curtain",
       entries: [

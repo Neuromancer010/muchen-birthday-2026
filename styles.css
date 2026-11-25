@@ -627,13 +627,24 @@ body.lightbox-open .music-toast {
 @keyframes smokeRise { 0% { opacity: 0; transform: translateY(6px); } 20% { opacity: 0.75; } 100% { opacity: 0; transform: translateY(-28px); } }
 
 .btn-cake {
-  padding: 10px 22px; border-radius: 999px;
-  background: rgba(232, 177, 83, 0.14);
-  border: 1px solid rgba(232, 177, 83, 0.36);
-  color: #FFE4AD; font-size: 0.88rem; font-weight: 500;
+  padding: 11px 24px; border-radius: 999px;
+  background: linear-gradient(135deg, rgba(242, 190, 96, 0.24), rgba(218, 130, 56, 0.2));
+  border: 1.5px solid rgba(245, 200, 112, 0.56);
+  color: #FFEDC2; font-size: 0.92rem; font-weight: 600;
+  box-shadow: 0 10px 28px -8px rgba(242, 186, 86, 0.42);
   transition: all 0.25s ease;
 }
-.btn-cake:hover { background: rgba(232, 177, 83, 0.26); transform: translateY(-1px); }
+.btn-cake:hover { background: linear-gradient(135deg, rgba(242, 190, 96, 0.36), rgba(218, 130, 56, 0.3)); transform: translateY(-2px); }
+
+/* 显眼且优雅的呼吸光环，引导老妈发现可交互按钮 */
+.pulse-cta {
+  position: relative;
+  animation: ctaBreath 2.8s ease-in-out infinite;
+}
+@keyframes ctaBreath {
+  0%, 100% { box-shadow: 0 10px 26px -6px rgba(242, 186, 86, 0.35), 0 0 0 0 rgba(245, 200, 112, 0.34); }
+  50%      { box-shadow: 0 14px 32px -6px rgba(242, 186, 86, 0.58), 0 0 0 9px rgba(245, 200, 112, 0); }
+}
 
 .letter-eyebrow, .eyebrow { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: #E8B154; margin-bottom: 10px; }
 .eyebrow.light { color: #F0C26D; }
@@ -641,12 +652,41 @@ body.lightbox-open .music-toast {
 .letter-body p { font-size: 0.98rem; color: rgba(247, 242, 232, 0.84); line-height: 1.92; margin-bottom: 14px; }
 
 .wish-revealed {
-  max-height: 0; opacity: 0; overflow: hidden; padding: 0 16px; border-radius: 12px;
-  background: rgba(232, 177, 83, 0.14); border: 1px solid rgba(232, 177, 83, 0.28);
+  max-height: 0; opacity: 0; overflow: hidden; padding: 0 16px; border-radius: 14px;
+  background: rgba(232, 177, 83, 0.14); border: 1px solid rgba(232, 177, 83, 0.32);
   color: #FFE5AE; font-size: 0.92rem;
   transition: max-height 0.55s var(--cut-ease), opacity 0.45s ease, padding 0.4s ease, margin 0.4s ease;
 }
-.wish-revealed.show { max-height: 120px; opacity: 1; padding: 12px 16px; margin-top: 14px; }
+.wish-revealed.show { max-height: 220px; opacity: 1; padding: 14px 18px; margin-top: 14px; }
+
+.btn-gift-box {
+  margin-top: 12px;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 18px; border-radius: 999px;
+  background: linear-gradient(135deg, #F1BE62, #D87B3A);
+  color: #1B1209; font-size: 0.86rem; font-weight: 700;
+  box-shadow: 0 10px 24px -6px rgba(241, 190, 98, 0.55);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.btn-gift-box:hover { transform: translateY(-2px) scale(1.03); }
+
+.gift-card-reveal {
+  max-height: 0; opacity: 0; overflow: hidden;
+  transform: perspective(800px) rotateX(-16deg) scale(0.95);
+  transition: max-height 0.65s var(--cut-ease), opacity 0.55s ease, transform 0.65s var(--cut-ease), margin 0.45s ease;
+}
+.gift-card-reveal.open {
+  max-height: 240px; opacity: 1; margin-top: 14px;
+  transform: perspective(800px) rotateX(0deg) scale(1);
+}
+.gift-card-inner {
+  padding: 18px 20px; border-radius: 16px;
+  background: linear-gradient(135deg, rgba(245, 196, 102, 0.18), rgba(226, 114, 64, 0.14));
+  border: 1px solid rgba(255, 224, 158, 0.36);
+  box-shadow: inset 0 1px 0 rgba(255, 248, 225, 0.25);
+}
+.gift-tag { font-size: 0.76rem; letter-spacing: 0.18em; color: #FFE3A4; margin-bottom: 8px; }
+.gift-text { font-family: var(--font-serif); font-size: 0.98rem; line-height: 1.9; color: #FFF8EB; }
 
 /* ==========================================================================
    ACT 2: 海拔轨迹总览
@@ -654,6 +694,13 @@ body.lightbox-open .music-toast {
 .route-section { padding: 36px 0 40px; }
 .route-head { text-align: center; margin-bottom: 20px; }
 .route-head h2 { font-family: var(--font-serif); font-size: clamp(1.5rem, 4vw, 2.1rem); font-weight: 600; letter-spacing: 0.1em; }
+.route-interact-hint {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 10px; padding: 5px 14px; border-radius: 999px;
+  background: rgba(242, 194, 102, 0.14);
+  border: 1px solid rgba(242, 194, 102, 0.32);
+  color: #FFE4A8; font-size: 0.8rem;
+}
 
 .route-map-card {
   background: rgba(16, 20, 28, 0.42);
@@ -750,6 +797,15 @@ body.lightbox-open .music-toast {
   .cinema-layout.reverse { grid-template-columns: 0.84fr 1.58fr; }
   .cinema-layout.reverse .cinema-stage-col { order: 2; }
   .cinema-layout.reverse .cinema-story-col { order: 1; }
+
+  /* 竖屏视频专用优雅双栏：左侧/右侧为舒展原生竖幅影院框，另一侧从容阅读文案 */
+  .cinema-layout.is-portrait-video {
+    grid-template-columns: minmax(300px, 395px) 1fr;
+    gap: 56px;
+  }
+  .cinema-layout.is-portrait-video.reverse {
+    grid-template-columns: 1fr minmax(300px, 395px);
+  }
 }
 
 .cinema-stage-col,
@@ -1048,15 +1104,44 @@ body.lightbox-open .music-toast {
 .reel-frame.paused .reel-bar-seg.active .reel-bar-fill { animation-play-state: paused; }
 @keyframes barFill { from { transform: scaleX(0); transform-origin: left; } to { transform: scaleX(1); transform-origin: left; } }
 
-.reel-filmstrip-toggle {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 10px; padding: 5px 12px; border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 232, 190, 0.12);
-  font-size: 0.75rem; color: rgba(247, 242, 232, 0.68);
-  transition: all 0.2s ease;
+/* 照片舞台两侧显眼轻触翻页箭头 */
+.reel-side-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 7;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(14, 17, 24, 0.44);
+  border: 1px solid rgba(255, 236, 198, 0.24);
+  backdrop-filter: blur(8px);
+  color: #FFF7E8;
+  font-size: 1.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.86;
+  transition: background 0.22s ease, transform 0.22s ease, opacity 0.22s ease;
 }
-.reel-filmstrip-toggle:hover { background: rgba(255, 232, 190, 0.14); color: #FFF4DC; }
+.reel-side-arrow:hover {
+  background: rgba(242, 190, 96, 0.32);
+  border-color: rgba(255, 224, 160, 0.55);
+  transform: translateY(-50%) scale(1.08);
+  opacity: 1;
+}
+.reel-side-arrow.prev { left: 12px; }
+.reel-side-arrow.next { right: 12px; }
+
+.reel-filmstrip-toggle {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: 12px; padding: 7px 16px; border-radius: 999px;
+  background: rgba(242, 194, 102, 0.12);
+  border: 1px solid rgba(242, 194, 102, 0.3);
+  font-size: 0.8rem; font-weight: 500; color: #FFE6B4;
+  transition: all 0.22s ease;
+}
+.reel-filmstrip-toggle:hover { background: rgba(242, 194, 102, 0.24); color: #FFF8EA; transform: translateY(-1px); }
 
 .reel-filmstrip {
   display: flex; gap: 8px; width: 100%; max-width: 100%;
@@ -1234,53 +1319,58 @@ body.lightbox-open .music-toast {
 }
 
 /* ==========================================================================
-   MODE E: 无界融图电影视频舞台（10 条朋友圈实拍动态影像）
+   MODE E: 原生比例无界融图电影视频舞台（竖屏原生竖幅，零横向压缩）
    ========================================================================== */
 .video-stage-shell {
   position: relative;
   width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.video-stage-shell.orient-P {
+  max-width: 390px;
+  margin: 0 auto;
 }
 
 .video-frame {
   position: relative;
   z-index: 1;
   width: 100%;
-  aspect-ratio: 4 / 5;
-  border-radius: 18px;
+  border-radius: 20px;
   overflow: hidden;
   background: transparent;
   user-select: none;
   cursor: pointer;
-  /* 与轮放舞台一致的羽化融图边缘 */
+  /* 柔和边缘融图 */
   -webkit-mask-image:
-    linear-gradient(to right, transparent 0%, #000 3.5%, #000 96.5%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, #000 3.5%, #000 95%, transparent 100%);
+    linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 2.5%, #000 96%, transparent 100%);
   -webkit-mask-composite: source-in;
   mask-image:
-    linear-gradient(to right, transparent 0%, #000 3.5%, #000 96.5%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, #000 3.5%, #000 95%, transparent 100%);
+    linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 2.5%, #000 96%, transparent 100%);
   mask-composite: intersect;
 }
 
 .video-frame.orient-L {
-  aspect-ratio: 16 / 10.5;
+  aspect-ratio: 960 / 672;
 }
 
-@media (min-width: 640px) {
-  .video-frame { aspect-ratio: 16 / 10.4; }
-  .video-frame.orient-L { aspect-ratio: 16 / 10.4; }
+.video-frame.orient-P {
+  aspect-ratio: 9 / 16;
+  max-width: 390px;
+  max-height: 76vh;
+  margin: 0 auto;
+  box-shadow: 0 28px 60px -18px rgba(0, 0, 0, 0.62);
 }
 
-.video-bg-blur {
-  position: absolute;
-  inset: -10%;
-  width: 120%;
-  height: 120%;
-  object-fit: cover;
-  filter: blur(34px) brightness(0.42) saturate(1.25);
-  transform: scale(1.12);
-  pointer-events: none;
-  z-index: 1;
+@media (max-width: 639px) {
+  .video-stage-shell.orient-P,
+  .video-frame.orient-P {
+    max-width: min(344px, 100%);
+    max-height: 74vh;
+  }
 }
 
 .cinema-video-el {
@@ -1290,18 +1380,6 @@ body.lightbox-open .music-toast {
   height: 100%;
   display: block;
   object-fit: cover;
-}
-
-.video-frame.orient-P .cinema-video-el {
-  object-fit: contain;
-  padding: 10px 8px 46px;
-  filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.52));
-}
-
-@media (max-width: 639px) {
-  .video-frame.orient-P .cinema-video-el {
-    padding: 0 0 42px;
-  }
 }
 
 .video-top-badge {
@@ -1450,9 +1528,94 @@ body.lightbox-open .music-toast {
   transition: width 0.12s linear;
 }
 
-.story-extra-action {
-  margin-top: 6px;
-  padding-left: 20px;
+.story-interact-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  padding-left: 18px;
+}
+
+.btn-heart-moment {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 248, 236, 0.08);
+  border: 1px solid rgba(255, 224, 174, 0.26);
+  color: rgba(255, 244, 224, 0.92);
+  font-size: 0.82rem;
+  font-weight: 500;
+  transition: all 0.24s var(--cut-ease);
+}
+.btn-heart-moment:hover {
+  background: rgba(242, 122, 108, 0.2);
+  border-color: rgba(248, 146, 132, 0.5);
+  transform: translateY(-1px);
+}
+.btn-heart-moment.loved {
+  background: linear-gradient(135deg, rgba(238, 102, 92, 0.3), rgba(244, 168, 92, 0.22));
+  border-color: rgba(252, 148, 134, 0.65);
+  color: #FFE4DC;
+  font-weight: 600;
+}
+
+.btn-special-interact {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(242, 188, 92, 0.24), rgba(224, 118, 56, 0.22));
+  border: 1.5px solid rgba(246, 198, 108, 0.56);
+  color: #FFEDC4;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 8px 24px -6px rgba(242, 182, 84, 0.35);
+  transition: all 0.22s var(--cut-ease);
+}
+.btn-special-interact:hover {
+  background: linear-gradient(135deg, rgba(242, 188, 92, 0.38), rgba(224, 118, 56, 0.34));
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* 互动彩蛋飞舞元素（雪饼 / 鼓掌 / 五色风马 / 盖碗清茶 / 爱心） */
+.flying-token {
+  position: fixed;
+  z-index: 95;
+  font-size: 1.7rem;
+  pointer-events: none;
+  animation: flyToken 1.15s var(--cut-ease) forwards;
+}
+@keyframes flyToken {
+  0%   { transform: translate(0, 0) scale(0.65) rotate(0deg); opacity: 1; }
+  62%  { transform: translate(var(--dx), var(--dy)) scale(1.22) rotate(var(--rot, 160deg)); opacity: 1; }
+  100% { transform: translate(calc(var(--dx) * 1.15), calc(var(--dy) + 24px)) scale(0.45) rotate(var(--rot2, 280deg)); opacity: 0; }
+}
+
+.wind-horse-flag {
+  position: fixed;
+  z-index: 95;
+  width: 22px;
+  height: 16px;
+  border-radius: 3px;
+  pointer-events: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  animation: flyWindHorse 1.7s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+}
+@keyframes flyWindHorse {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(0.7); opacity: 0.96; }
+  50%  { transform: translate(var(--dx), var(--dy)) rotate(var(--rot, 140deg)) scale(1.1); opacity: 0.95; }
+  100% { transform: translate(calc(var(--dx) * 1.65), calc(var(--dy) - 90px)) rotate(var(--rot2, 340deg)) scale(0.5); opacity: 0; }
+}
+
+.fav-summary {
+  margin-top: 8px;
+  min-height: 20px;
+  font-size: 0.84rem;
+  color: rgba(255, 224, 186, 0.85);
 }
 
 /* ==========================================================================

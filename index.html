@@ -140,7 +140,7 @@
               </g>
             </svg>
           </div>
-          <button class="btn-cake" id="btnBlowCandles" type="button">吹灭蜡烛，许个愿</button>
+          <button class="btn-cake pulse-cta" id="btnBlowCandles" type="button">🕯️ 吹灭蜡烛，许个愿</button>
         </div>
 
         <div class="birthday-letter">
@@ -155,7 +155,14 @@
             </p>
           </div>
           <div class="wish-revealed" id="wishRevealed" aria-live="polite">
-            蜡烛吹灭啦——祝新的一岁平安顺心，自在开心。
+            <p>蜡烛吹灭啦——祝新的一岁平安顺心，自在开心。</p>
+            <button class="btn-gift-box" id="btnOpenGift" type="button">🎁 拆开今年的生日小惊喜</button>
+          </div>
+          <div class="gift-card-reveal" id="giftCardReveal" aria-hidden="true">
+            <div class="gift-card-inner">
+              <div class="gift-tag">✦ 给老妈的专属祝福 ✦</div>
+              <p class="gift-text">愿你眼里永远有雪山与阳光，心里永远装着自由的风。<br />不必赶路，想看的风景，我们陪你一站一站慢慢去。</p>
+            </div>
           </div>
         </div>
       </div>
@@ -170,6 +177,7 @@
       <div class="route-head cut-reveal cut-blur-zoom">
         <div class="eyebrow light">10.29 — 11.09 · ROUTE</div>
         <h2>川西山河轨迹</h2>
+        <div class="route-interact-hint">👆 点击任意地标，直达那一天的风景</div>
       </div>
       <div class="route-map-card cut-reveal cut-wipe-right">
         <div class="route-map-scroll">
@@ -202,10 +210,11 @@
         </p>
 
         <div class="finale-actions">
-          <button class="btn-lantern" id="btnLantern" type="button">🏮 放一盏灯</button>
+          <button class="btn-lantern pulse-cta" id="btnLantern" type="button">🏮 放一盏生日祈愿天灯</button>
           <button class="btn-outline-light" id="btnReplayFilm" type="button">↻ 重看全卷</button>
         </div>
         <div class="lantern-counter" id="lanternCounter"></div>
+        <div class="fav-summary" id="favSummary"></div>
       </div>
 
       <footer class="site-footer">

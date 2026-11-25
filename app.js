@@ -58,6 +58,8 @@
     const bokehs = [];
     const bursts = [];
     const lanterns = [];
+    const rockets = [];
+    const ripples = [];
 
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -125,16 +127,33 @@
       }
     }
 
-    function spawnLantern() {
+    function spawnLantern(wish = "") {
       lanterns.push({
         x: W * (0.2 + Math.random() * 0.6),
         y: H + 30,
         vx: (Math.random() - 0.5) * 0.32,
-        vy: -(0.72 + Math.random() * 0.5),
+        vy: -(0.78 + Math.random() * 0.45),
         sway: Math.random() * Math.PI * 2,
-        scale: 0.78 + Math.random() * 0.42,
-        alpha: 0.95
+        scale: 0.85 + Math.random() * 0.38,
+        alpha: 0.96,
+        wish
       });
+    }
+
+    function spawnRocket(startX) {
+      const x0 = typeof startX === "number" ? startX : W * (0.35 + Math.random() * 0.3);
+      rockets.push({
+        x: x0,
+        y: H - 30,
+        vx: (Math.random() - 0.5) * 1.4,
+        vy: -(11.5 + Math.random() * 3.0),
+        targetY: H * (0.18 + Math.random() * 0.16),
+        trail: []
+      });
+    }
+
+    function spawnRipple(x, y) {
+      ripples.push({ x, y, r: 4, maxR: 46, alpha: 0.55 });
     }
 
     function setTempo(bpm) {
@@ -296,6 +315,56 @@
         ctx.lineTo(9, 12); ctx.lineTo(-9, 12); ctx.closePath(); ctx.fill();
         ctx.fillStyle = "#FFFBEA";
         ctx.beginPath(); ctx.arc(0, 9, 2.5, 0, Math.PI * 2); ctx.fill();
+        if (l.wish) {
+          ctx.font = "600 12px -apple-system, 'PingFang SC', sans-serif";
+          ctx.fillStyle = "rgba(255, 240, 198, 0.94)";
+          ctx.textAlign = "center";
+          ctx.fillText(l.wish, 0, 29);
+        }
+        ctx.restore();
+      }
+
+      // 星空火箭升空与烟花绽放（西昌彩蛋）
+      for (let i = rockets.length - 1; i >= 0; i--) {
+        const rk = rockets[i];
+        rk.trail.push({ x: rk.x, y: rk.y });
+        if (rk.trail.length > 18) rk.trail.shift();
+        rk.x += rk.vx;
+        rk.y += rk.vy;
+        rk.vy *= 0.988;
+
+        for (let t = 0; t < rk.trail.length; t++) {
+          const pt = rk.trail[t];
+          const frac = t / rk.trail.length;
+          ctx.save();
+          ctx.globalAlpha = frac * 0.85;
+          ctx.fillStyle = t > rk.trail.length - 4 ? "#FFF8DC" : "#F5B84C";
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, 1.5 + frac * 3.2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        if (rk.y <= rk.targetY || rk.vy > -2.5) {
+          spawnBurst(rk.x, rk.y, 64);
+          setTimeout(() => spawnBurst(rk.x + (Math.random() - 0.5) * 90, rk.y + (Math.random() - 0.5) * 45, 36), 180);
+          rockets.splice(i, 1);
+        }
+      }
+
+      // 轻触星光涟漪
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const rp = ripples[i];
+        rp.r += 2.2;
+        rp.alpha -= 0.025;
+        if (rp.alpha <= 0) { ripples.splice(i, 1); continue; }
+        ctx.save();
+        ctx.globalAlpha = rp.alpha;
+        ctx.strokeStyle = "rgba(255, 224, 152, 0.85)";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
+        ctx.stroke();
         ctx.restore();
       }
 
@@ -319,7 +388,7 @@
     window.addEventListener("resize", () => { resize(); initMotes(); });
     requestAnimationFrame(tick);
 
-    return { spawnBurst, spawnLantern, setTempo, setAtmosphere };
+    return { spawnBurst, spawnLantern, spawnRocket, spawnRipple, setTempo, setAtmosphere };
   })();
 
   // ------------------------------------------------------------------------
@@ -778,8 +847,7 @@
         seqIdx = curIdx >= 0 ? curIdx : 0;
       }
 
-      const totalMin = Math.round(autoPlan.reduce((a, b) => a + b.dwellMs, 0) / 60000);
-      MusicEngine.showToast(`♫ 正在放映（约 ${totalMin} 分钟 · 两首配乐全程伴奏）`);
+      MusicEngine.showToast("♫ 正在为您放映川西记忆");
       clearTimeout(autoTimer);
       advanceFilm();
     }
@@ -821,6 +889,8 @@
     const cakeScene = $("#cakeScene");
     const blowBtn = $("#btnBlowCandles");
     const wishRevealed = $("#wishRevealed");
+    const giftBtn = $("#btnOpenGift");
+    const giftCard = $("#giftCardReveal");
     let blown = false;
 
     function toggleCandles() {
@@ -828,13 +898,27 @@
       cakeScene.classList.toggle("blown", blown);
       if (blown) {
         const rect = cakeScene.getBoundingClientRect();
-        AmbientFX.spawnBurst(rect.left + rect.width / 2, rect.top + 55, 52);
+        AmbientFX.spawnBurst(rect.left + rect.width / 2, rect.top + 55, 56);
         wishRevealed.classList.add("show");
-        blowBtn.textContent = "再点亮蜡烛";
+        blowBtn.textContent = "🕯️ 再点亮蜡烛";
+        blowBtn.classList.remove("pulse-cta");
       } else {
         wishRevealed.classList.remove("show");
-        blowBtn.textContent = "吹灭蜡烛，许个愿";
+        if (giftCard) { giftCard.classList.remove("open"); giftCard.setAttribute("aria-hidden", "true"); }
+        if (giftBtn) giftBtn.style.display = "";
+        blowBtn.textContent = "🕯️ 吹灭蜡烛，许个愿";
+        blowBtn.classList.add("pulse-cta");
       }
+    }
+
+    if (giftBtn && giftCard) {
+      giftBtn.addEventListener("click", (e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        AmbientFX.spawnBurst(r.left + r.width / 2, r.top + r.height / 2, 54);
+        giftCard.classList.add("open");
+        giftCard.setAttribute("aria-hidden", "false");
+        giftBtn.style.display = "none";
+      });
     }
 
     cakeScene.addEventListener("click", toggleCandles);
@@ -842,6 +926,13 @@
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleCandles(); }
     });
     blowBtn.addEventListener("click", toggleCandles);
+
+    // 轻触任意按钮时在指尖绽放柔和金色光环
+    document.addEventListener("pointerdown", (e) => {
+      if (e.target.closest("button, .route-node, .cake-scene")) {
+        AmbientFX.spawnRipple(e.clientX, e.clientY);
+      }
+    }, { passive: true });
   }
 
   // ------------------------------------------------------------------------
@@ -919,8 +1010,188 @@
   }
 
   // ------------------------------------------------------------------------
-  // 7. 构建融图轮放组件（Cinema Reel + 6 种切镜 / Handscroll / 3D Deck / Spotlight）
+  // 7. 心动瞬间收藏 + 各站专属互动彩蛋 + 融图影院组件
   // ------------------------------------------------------------------------
+  const Favorites = (() => {
+    const KEY = "mom_sichuan_favs_2026";
+    let set = new Set();
+    try {
+      const raw = JSON.parse(localStorage.getItem(KEY) || "[]");
+      if (Array.isArray(raw)) set = new Set(raw);
+    } catch (_) {}
+
+    function save() {
+      try { localStorage.setItem(KEY, JSON.stringify([...set])); } catch (_) {}
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const el = $("#favSummary");
+      if (!el) return;
+      el.textContent = set.size > 0 ? `❤️ 已收藏 ${set.size} 个心动瞬间` : "";
+    }
+
+    return {
+      has: (k) => set.has(k),
+      toggle(k) {
+        if (set.has(k)) set.delete(k);
+        else set.add(k);
+        save();
+        return set.has(k);
+      },
+      updateSummary
+    };
+  })();
+
+  function spawnTokens(btn, tokens, count = 4) {
+    const r = btn.getBoundingClientRect();
+    for (let k = 0; k < count; k++) {
+      const el = document.createElement("span");
+      el.className = "flying-token";
+      el.textContent = tokens[k % tokens.length];
+      el.style.left = `${r.left + r.width / 2}px`;
+      el.style.top = `${r.top}px`;
+      el.style.setProperty("--dx", `${(Math.random() - 0.5) * 240}px`);
+      el.style.setProperty("--dy", `${-110 - Math.random() * 140}px`);
+      el.style.setProperty("--rot", `${(Math.random() - 0.5) * 260}deg`);
+      el.style.setProperty("--rot2", `${(Math.random() - 0.5) * 420}deg`);
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1200);
+    }
+  }
+
+  function spawnWindHorses(btn) {
+    const colors = ["#3A86D9", "#F7F5EE", "#DC4A3D", "#3CA66B", "#F2BD42"];
+    const r = btn.getBoundingClientRect();
+    for (let k = 0; k < 14; k++) {
+      const fl = document.createElement("span");
+      fl.className = "wind-horse-flag";
+      fl.style.background = colors[k % colors.length];
+      fl.style.left = `${r.left + r.width / 2}px`;
+      fl.style.top = `${r.top}px`;
+      fl.style.setProperty("--dx", `${(Math.random() - 0.5) * 320}px`);
+      fl.style.setProperty("--dy", `${-120 - Math.random() * 180}px`);
+      fl.style.setProperty("--rot", `${(Math.random() - 0.5) * 320}deg`);
+      fl.style.setProperty("--rot2", `${(Math.random() - 0.5) * 600}deg`);
+      document.body.appendChild(fl);
+      setTimeout(() => fl.remove(), 1750);
+    }
+  }
+
+  function buildInteractRow(momentKey, specialType, extraCtx = {}) {
+    const row = document.createElement("div");
+    row.className = "story-interact-row";
+
+    // 1) 每站专属定制趣味互动（显眼呼吸光环）
+    if (specialType === "marmot-cracker") {
+      let count = 0;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn-special-interact pulse-cta";
+      btn.id = "btnFeedCracker";
+      btn.textContent = "🍘 投喂雪饼";
+      btn.addEventListener("click", () => {
+        count++;
+        spawnTokens(btn, ["🍘", "✨", "🍘", "💛"], 4);
+        btn.classList.remove("pulse-cta");
+        btn.textContent = count === 1 ? "🍘 已给 1 片 · 停手啦！"
+          : count < 4 ? `🍘 已投喂 ${count} 片雪饼`
+          : `🍘 吃撑啦（共 ${count} 片）`;
+      });
+      row.appendChild(btn);
+    } else if (specialType === "yading-cheer") {
+      let count = 0;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn-special-interact pulse-cta";
+      btn.textContent = "🏆 为零吸氧登顶鼓掌";
+      btn.addEventListener("click", () => {
+        count++;
+        const r = btn.getBoundingClientRect();
+        AmbientFX.spawnBurst(r.left + r.width / 2, r.top, 36);
+        spawnTokens(btn, ["👏", "🏔️", "✨", "👍"], 5);
+        btn.classList.remove("pulse-cta");
+        btn.textContent = `👏 太厉害了！已鼓掌 ${count} 次`;
+      });
+      row.appendChild(btn);
+    } else if (specialType === "wind-horse") {
+      let count = 0;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn-special-interact pulse-cta";
+      btn.textContent = "🪁 撒一把祝福风马";
+      btn.addEventListener("click", () => {
+        count++;
+        spawnWindHorses(btn);
+        btn.classList.remove("pulse-cta");
+        btn.textContent = count === 1 ? "🪁 风马已随风起 · 岁岁平安" : `🪁 已撒 ${count} 把祝福风马`;
+        MusicEngine.showToast("风马随风飞向雪山，祝老妈平安顺遂");
+      });
+      row.appendChild(btn);
+    } else if (specialType === "pour-tea") {
+      let count = 0;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn-special-interact pulse-cta";
+      btn.textContent = "🍵 添一盏盖碗清茶";
+      btn.addEventListener("click", () => {
+        count++;
+        spawnTokens(btn, ["🍵", "♨️", "✨", "🏮"], 4);
+        btn.classList.remove("pulse-cta");
+        btn.textContent = `🍵 已续茶 ${count} 盏 · 慢慢摆龙门阵`;
+      });
+      row.appendChild(btn);
+    } else if (specialType === "waterfall-sound" && typeof extraCtx.toggleSound === "function") {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn-special-interact pulse-cta";
+      btn.textContent = "♨️ 听听峡谷瀑布原声";
+      btn.addEventListener("click", () => {
+        const nowUnmuted = extraCtx.toggleSound();
+        btn.classList.remove("pulse-cta");
+        btn.textContent = nowUnmuted ? "🔊 正在聆听温泉瀑布声" : "♨️ 听听峡谷瀑布原声";
+      });
+      extraCtx.onMuteSync = (isMuted) => {
+        btn.textContent = isMuted ? "♨️ 听听峡谷瀑布原声" : "🔊 正在聆听温泉瀑布声";
+      };
+      row.appendChild(btn);
+    } else if (specialType === "wish-rocket") {
+      let count = 0;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn-special-interact pulse-cta";
+      btn.textContent = "🚀 补一场西昌星空火箭";
+      btn.addEventListener("click", () => {
+        count++;
+        const r = btn.getBoundingClientRect();
+        AmbientFX.spawnRocket(r.left + r.width / 2);
+        setTimeout(() => AmbientFX.spawnRocket(window.innerWidth * 0.65), 260);
+        btn.classList.remove("pulse-cta");
+        btn.textContent = count === 1 ? "🚀 星空火箭已升空 ✨" : `🚀 已放飞 ${count} 场星空火箭`;
+        MusicEngine.showToast("这枚西昌星空火箭，先提前送给老妈 ✨");
+      });
+      row.appendChild(btn);
+    }
+
+    // 2) 每站都有「收藏这一刻」心动按钮
+    const heartBtn = document.createElement("button");
+    heartBtn.type = "button";
+    const initLoved = Favorites.has(momentKey);
+    heartBtn.className = "btn-heart-moment" + (initLoved ? " loved" : "");
+    heartBtn.textContent = initLoved ? "❤️ 已收藏这一刻" : "🤍 收藏这一刻";
+    heartBtn.addEventListener("click", () => {
+      const loved = Favorites.toggle(momentKey);
+      heartBtn.classList.toggle("loved", loved);
+      heartBtn.textContent = loved ? "❤️ 已收藏这一刻" : "🤍 收藏这一刻";
+      if (loved) {
+        spawnTokens(heartBtn, ["❤️", "✨", "💛"], 4);
+      }
+    });
+    row.appendChild(heartBtn);
+
+    return row;
+  }
+
   function registerPhotos(ch, entry) {
     return entry.photos.map((ph, idx) => {
       const globalIdx = allPhotosFlat.length;
@@ -992,7 +1263,9 @@
     flashLayer.className = "reel-flash-layer";
     const streakLayer = document.createElement("div");
     streakLayer.className = "reel-light-streak";
-    frame.append(vignette, flashLayer, streakLayer);
+    const sidePrev = mkBtn("reel-side-arrow prev", "‹", "上一张照片");
+    const sideNext = mkBtn("reel-side-arrow next", "›", "下一张照片");
+    frame.append(vignette, flashLayer, streakLayer, sidePrev, sideNext);
 
     const hud = document.createElement("div");
     hud.className = "reel-hud";
@@ -1004,10 +1277,10 @@
 
     const ctrls = document.createElement("div");
     ctrls.className = "reel-controls";
-    const btnPrev = mkBtn("reel-btn", "‹", "上一帧");
-    const btnPause = mkBtn("reel-btn", "❚❚", "暂停或继续轮放");
-    const btnNext = mkBtn("reel-btn", "›", "下一帧");
-    const btnZoom = mkBtn("reel-btn", "⤢", "全屏看原图");
+    const btnPrev = mkBtn("reel-btn", "‹", "上一张");
+    const btnPause = mkBtn("reel-btn", "❚❚", "暂停或继续");
+    const btnNext = mkBtn("reel-btn", "›", "下一张");
+    const btnZoom = mkBtn("reel-btn", "⤢", "全屏看大图");
     ctrls.append(btnPrev, btnPause, btnNext, btnZoom);
     capRow.append(altEl, ctrls);
 
@@ -1027,11 +1300,11 @@
     shell.appendChild(frame);
     stageCol.appendChild(shell);
 
-    // 折叠缩略条
+    // 折叠照片全览条（去掉技术化词汇）
     const stripBtn = document.createElement("button");
     stripBtn.type = "button";
     stripBtn.className = "reel-filmstrip-toggle";
-    stripBtn.textContent = `展开胶片选帧（共 ${photos.length} 张）`;
+    stripBtn.textContent = `查看这一天全部 ${photos.length} 张照片 ▾`;
 
     const strip = document.createElement("div");
     strip.className = "reel-filmstrip";
@@ -1047,7 +1320,7 @@
 
     stripBtn.addEventListener("click", () => {
       const open = strip.classList.toggle("open");
-      stripBtn.textContent = open ? "收起胶片选帧" : `展开胶片选帧（共 ${photos.length} 张）`;
+      stripBtn.textContent = open ? "收起照片 ▴" : `查看这一天全部 ${photos.length} 张照片 ▾`;
     });
 
     stageCol.append(stripBtn, strip);
@@ -1060,8 +1333,12 @@
       ${ch.badge ? `<span class="story-badge">⛰ ${ch.badge}</span>` : ""}
       ${entry.subTitle ? `<div class="story-sublabel">${entry.subTitle}</div>` : ""}
       <p class="mom-quote">${formatQuoteLines(entry.caption)}</p>
-      <div class="mom-quote-meta">${metaTime} · ${photos.length} 帧轮放</div>
+      <div class="mom-quote-meta">${metaTime}</div>
     `;
+    const reelSpecial = (ch.special === "yading-cheer" || ch.special === "wind-horse")
+      ? ch.special
+      : (ch.special === "wish-rocket" && entry.subTitle && entry.subTitle.includes("邛海") ? "wish-rocket" : null);
+    storyCol.appendChild(buildInteractRow(`${ch.id}-${entry.subTitle || "reel"}`, reelSpecial));
 
     wrap.append(stageCol, storyCol);
 
@@ -1132,6 +1409,8 @@
       }
     }
 
+    sidePrev.addEventListener("click", (e) => { e.stopPropagation(); goTo(idx - 1); });
+    sideNext.addEventListener("click", (e) => { e.stopPropagation(); goTo(idx + 1); });
     btnPrev.addEventListener("click", (e) => { e.stopPropagation(); goTo(idx - 1); });
     btnNext.addEventListener("click", (e) => { e.stopPropagation(); goTo(idx + 1); });
     btnPause.addEventListener("click", (e) => {
@@ -1176,8 +1455,9 @@
     const hasClock = entry.time && entry.time.includes(":");
     head.innerHTML = `
       <p class="mom-quote">${formatQuoteLines(entry.caption)}</p>
-      <div class="mom-quote-meta">${hasClock ? `${ch.date} ${entry.time}` : ch.date} · 横轴画卷</div>
+      <div class="mom-quote-meta">${hasClock ? `${ch.date} ${entry.time}` : ch.date}</div>
     `;
+    head.appendChild(buildInteractRow(`${ch.id}-scroll`, null));
     wrap.appendChild(head);
 
     const vp = document.createElement("div");
@@ -1203,7 +1483,7 @@
     bar.className = "handscroll-bar";
     const prev = mkBtn("hs-nav-btn", "‹", "向左卷动");
     const label = document.createElement("span");
-    label.textContent = "画卷徐徐展开 · 左右滑动浏览";
+    label.textContent = "← 左右滑动，点击图片可放大 →";
     const next = mkBtn("hs-nav-btn", "›", "向右卷动");
     bar.append(prev, label, next);
     wrap.appendChild(bar);
@@ -1324,8 +1604,9 @@
     storyCol.className = "cinema-story-col cut-reveal cut-blur-zoom";
     storyCol.innerHTML = `
       <p class="mom-quote">${formatQuoteLines(entry.caption)}</p>
-      <div class="mom-quote-meta">${ch.date} ${entry.time || ""} · 叠影轮播</div>
+      <div class="mom-quote-meta">${ch.date} ${entry.time || ""}</div>
     `;
+    storyCol.appendChild(buildInteractRow(`${ch.id}-deck`, ch.special === "pour-tea" ? "pour-tea" : null));
 
     wrap.append(stageCol, storyCol);
     layoutCards();
@@ -1352,15 +1633,16 @@
   function createCinemaVideo(ch, entry, reverse) {
     const vid = entry.video;
     const enterCut = ch.enterCut || "curtain";
+    const isPortrait = vid.orient === "P";
 
     const wrap = document.createElement("div");
-    wrap.className = "cinema-layout" + (reverse ? " reverse" : "");
+    wrap.className = "cinema-layout" + (isPortrait ? " is-portrait-video" : "") + (reverse ? " reverse" : "");
 
     const stageCol = document.createElement("div");
     stageCol.className = `cinema-stage-col cut-reveal cut-${enterCut}`;
 
     const shell = document.createElement("div");
-    shell.className = "video-stage-shell";
+    shell.className = `video-stage-shell orient-${vid.orient}`;
 
     // 环境融图光晕
     const aura = document.createElement("div");
@@ -1370,14 +1652,8 @@
 
     const frame = document.createElement("div");
     frame.className = `video-frame orient-${vid.orient} paused`;
-
-    if (vid.orient === "P") {
-      const bg = document.createElement("img");
-      bg.className = "video-bg-blur";
-      bg.src = vid.poster;
-      bg.alt = "";
-      bg.loading = "lazy";
-      frame.appendChild(bg);
+    if (vid.w && vid.h) {
+      frame.style.aspectRatio = `${vid.w} / ${vid.h}`;
     }
 
     const videoEl = document.createElement("video");
@@ -1402,7 +1678,7 @@
     const totalStr = formatDur(vid.duration);
     const badge = document.createElement("div");
     badge.className = "video-top-badge";
-    badge.innerHTML = `<span class="video-live-dot"></span><span class="video-time-txt">实拍影像 · ${totalStr}</span>`;
+    badge.innerHTML = `<span class="video-live-dot"></span><span class="video-time-txt">${totalStr}</span>`;
     const timeTxt = badge.querySelector(".video-time-txt");
     frame.appendChild(badge);
 
@@ -1452,38 +1728,17 @@
     storyCol.innerHTML = `
       ${entry.subTitle ? `<div class="story-sublabel">${entry.subTitle}</div>` : ""}
       <p class="mom-quote">${formatQuoteLines(entry.caption)}</p>
-      <div class="mom-quote-meta">${metaTime} · 动态影像 ${totalStr}</div>
+      <div class="mom-quote-meta">${metaTime}</div>
     `;
 
-    // 保留 10.30 土拨鼠投喂雪饼互动彩蛋
-    if (ch.special === "marmot-cracker") {
-      let count = 0;
-      const actionBox = document.createElement("div");
-      actionBox.className = "story-extra-action";
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "btn-cracker";
-      btn.id = "btnFeedCracker";
-      btn.textContent = "🍘 投喂雪饼";
-      btn.addEventListener("click", (e) => {
-        count++;
-        const r = e.currentTarget.getBoundingClientRect();
-        for (let k = 0; k < 3; k++) {
-          const el = document.createElement("span");
-          el.className = "flying-cracker";
-          el.textContent = k === 1 ? "✨" : "🍘";
-          el.style.left = `${r.left + r.width / 2}px`;
-          el.style.top = `${r.top}px`;
-          el.style.setProperty("--dx", `${(Math.random() - 0.5) * 200}px`);
-          el.style.setProperty("--dy", `${-110 - Math.random() * 120}px`);
-          document.body.appendChild(el);
-          setTimeout(() => el.remove(), 950);
-        }
-        btn.textContent = count === 1 ? "🍘 已给 1 片 · 停手了" : `🍘 已给 ${count} 片雪饼`;
-      });
-      actionBox.appendChild(btn);
-      storyCol.appendChild(actionBox);
-    }
+    const extraCtx = {
+      toggleSound() {
+        setMutedState(!videoEl.muted, false);
+        return !videoEl.muted;
+      }
+    };
+    const vidSpecial = (ch.special === "marmot-cracker" || ch.special === "waterfall-sound") ? ch.special : null;
+    storyCol.appendChild(buildInteractRow(`${ch.id}-${entry.subTitle || "vid"}`, vidSpecial, extraCtx));
 
     wrap.append(stageCol, storyCol);
 
@@ -1500,6 +1755,7 @@
       videoEl.muted = muted;
       btnSound.classList.toggle("unmuted", !muted);
       btnSound.textContent = muted ? "🔇 开启原声" : "🔊 原声中";
+      if (typeof extraCtx.onMuteSync === "function") extraCtx.onMuteSync(muted);
       if (!muted) {
         if (unmutedVideoCtrl && unmutedVideoCtrl !== ctrl) {
           unmutedVideoCtrl.muteSilently();
@@ -1556,7 +1812,7 @@
       const dur = videoEl.duration || vid.duration || 1;
       const pct = Math.min(100, (videoEl.currentTime / dur) * 100);
       scrubFill.style.width = `${pct}%`;
-      timeTxt.textContent = `实拍影像 · ${formatDur(videoEl.currentTime)} / ${formatDur(dur)}`;
+      timeTxt.textContent = `${formatDur(videoEl.currentTime)} / ${formatDur(dur)}`;
     });
 
     frame.addEventListener("click", (e) => {
@@ -1916,12 +2172,17 @@
   // ------------------------------------------------------------------------
   function initFinale() {
     let count = 0;
+    const wishes = ["平安顺心", "岁岁常安", "吃好喝好", "看遍山河", "自在开心", "永远年轻"];
     const counter = $("#lanternCounter");
+    Favorites.updateSummary();
+
     $("#btnLantern").addEventListener("click", () => {
+      const w1 = wishes[(count * 2) % wishes.length];
+      const w2 = wishes[(count * 2 + 1) % wishes.length];
       count++;
-      AmbientFX.spawnLantern();
-      setTimeout(() => AmbientFX.spawnLantern(), 280);
-      counter.textContent = `已放飞 ${count * 2} 盏灯`;
+      AmbientFX.spawnLantern(w1);
+      setTimeout(() => AmbientFX.spawnLantern(w2), 320);
+      counter.textContent = `已放飞 ${count * 2} 盏祈愿天灯 · 祝老妈${w1}`;
     });
 
     $("#btnReplayFilm").addEventListener("click", () => {
